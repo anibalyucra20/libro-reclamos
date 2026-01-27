@@ -40,11 +40,6 @@ final class AlertasReclamosService
                 continue;
             }
 
-            // opcional: respetar hora_envio (simple)
-            if (!$this->isHoraEnvio($cfg['hora_envio'] ?? '09:00')) {
-                continue;
-            }
-
             $emails = $this->parseEmails((string)$cfg['emails']);
             if (!$emails) continue;
 

@@ -4,18 +4,17 @@ declare(strict_types=1);
 use Dotenv\Dotenv;
 use App\Services\AlertasReclamosService;
 
-// Autoload
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
-// Cargar .env
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+// Carga .env (si en producción usas .env)
+if (file_exists(__DIR__ . '/../../.env')) {
+    $dotenv = Dotenv::createImmutable(dirname(__DIR__, 2));
+    $dotenv->load();
+}
 
-// Inicializar DB (usa TU clase real)
-require_once __DIR__ . '/../app/Core/DB.php';
-// o ../app/DB.php según tu estructura real
+// Carga config (si tu DB.php la requiere)
+require __DIR__ . '/../Config/database.php';
 
-// Ejecutar servicio
 $svc = new AlertasReclamosService();
 
 try {
