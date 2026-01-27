@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Bloquear acceso directo a carpetas sensibles (solo si existieran bajo public)
+RewriteRule ^(app|storage|vendor|\.env) - [F,L]
+
+# Front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
