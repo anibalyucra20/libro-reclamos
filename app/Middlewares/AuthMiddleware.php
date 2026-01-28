@@ -12,7 +12,11 @@ final class AuthMiddleware
   public function handle(Request $request, Response $response): void
   {
     if (!Auth::check()) {
-      $response->redirect('/login');
+      $panel = (string)($request->tenant['panel_prefix'] ?? '/panel');
+      $panel = rtrim($panel, '/');
+      if ($panel === '') $panel = '/panel';
+
+      $response->redirect($panel . '/login');
     }
   }
 }

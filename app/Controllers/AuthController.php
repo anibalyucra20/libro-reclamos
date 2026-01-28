@@ -11,14 +11,6 @@ use App\Models\Usuario;
 
 final class AuthController extends Controller
 {
-  private function panelPrefix(): string
-  {
-    $p = (string)($this->request->tenant['panel_prefix'] ?? '/panel');
-    if ($p === '') $p = '/panel';
-    if ($p[0] !== '/') $p = '/' . $p;
-    return rtrim($p, '/');
-  }
-
   public function form(): void
   {
     $this->view('panel.login', [
@@ -89,7 +81,7 @@ final class AuthController extends Controller
     }
 
     // fallback
-    $this->response->redirect($this->panelPrefix() . '/login');
+    $this->response->redirect($panel . '/login');
   }
 
   public function logout(): void

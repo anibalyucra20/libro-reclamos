@@ -32,7 +32,10 @@ $fmt = function ($v): string {
   return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 };
 ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Reclamos</h1>
@@ -41,7 +44,7 @@ $fmt = function ($v): string {
     </div>
   </div>
 
-  <form method="GET" action="/reclamos" class="d-flex flex-column flex-sm-row gap-2 align-items-sm-end">
+  <form method="GET" action="<?= $__panelPrefix ?>/reclamos" class="d-flex flex-column flex-sm-row gap-2 align-items-sm-end">
     <div>
       <label class="form-label mb-1">Estado</label>
       <select class="form-select" name="estado" style="min-width: 220px;">
@@ -77,7 +80,7 @@ $fmt = function ($v): string {
       <button type="submit" class="btn btn-primary">
         <i class="bi bi-funnel me-1"></i> Filtrar
       </button>
-      <a class="btn btn-outline-secondary" href="/reclamos">
+      <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/reclamos">
         <i class="bi bi-x-circle me-1"></i> Limpiar
       </a>
 
@@ -91,7 +94,7 @@ $fmt = function ($v): string {
         $exportUrl = '/reclamos/exportar?' . http_build_query($qs);
 
         ?>
-        <a class="btn btn-outline-success" href="<?= htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8') ?>">
+        <a class="btn btn-outline-success" href="<?= $__panelPrefix ?><?= htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8') ?>">
           <i class="bi bi-file-earmark-excel me-1"></i> Exportar Excel
         </a>
       <?php endif; ?>
@@ -161,7 +164,7 @@ $fmt = function ($v): string {
                 </td>
 
                 <td class="text-end pe-3">
-                  <a class="btn btn-sm btn-outline-primary" href="/reclamos/<?= $id ?>">
+                  <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>">
                     <i class="bi bi-eye me-1"></i> Ver
                   </a>
                 </td>

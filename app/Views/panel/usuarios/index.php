@@ -1,11 +1,14 @@
 <?php $users = $users ?? []; ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Usuarios</h1>
     <div class="text-body-secondary">Gestión de usuarios por empresa (máx. 200).</div>
   </div>
-  <a class="btn btn-primary" href="/usuarios/nuevo">
+  <a class="btn btn-primary" href="<?= $__panelPrefix ?>/usuarios/nuevo">
     <i class="bi bi-person-plus me-1"></i> Nuevo
   </a>
 </div>
@@ -37,7 +40,7 @@
               </td>
               <td><?= (int)$u['scopes'] ?></td>
               <td class="text-end pe-3">
-                <a class="btn btn-sm btn-outline-primary" href="/usuarios/<?= (int)$u['id'] ?>">
+                <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>">
                   <i class="bi bi-gear me-1"></i> Gestionar
                 </a>
               </td>

@@ -4,13 +4,16 @@ $scopes = $scopes ?? [];
 $roles = $roles ?? [];
 $establecimientos = $establecimientos ?? [];
 ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Usuario</h1>
     <div class="text-body-secondary"><?= htmlspecialchars($u['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
   </div>
-  <a class="btn btn-outline-secondary" href="/usuarios"><i class="bi bi-arrow-left me-1"></i> Volver</a>
+  <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/usuarios"><i class="bi bi-arrow-left me-1"></i> Volver</a>
 </div>
 
 <?php if (!empty($created)): ?><div class="alert alert-success">Usuario creado.</div><?php endif; ?>
@@ -23,7 +26,7 @@ $establecimientos = $establecimientos ?? [];
       <div class="card-body">
         <div class="fw-bold mb-2">Datos</div>
 
-        <form method="POST" action="/usuarios/<?= (int)$u['id'] ?>" class="row g-3">
+        <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>" class="row g-3">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="col-12">
@@ -52,7 +55,7 @@ $establecimientos = $establecimientos ?? [];
         <hr>
 
         <div class="fw-bold mb-2">Reset password</div>
-        <form method="POST" action="/usuarios/<?= (int)$u['id'] ?>/password" class="d-flex gap-2">
+        <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/password" class="d-flex gap-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
           <input class="form-control" name="password" placeholder="Nuevo password (min 6)" required>
           <button class="btn btn-outline-danger" type="submit"><i class="bi bi-key me-1"></i> Reset</button>
@@ -88,7 +91,7 @@ $establecimientos = $establecimientos ?? [];
                     <td><span class="badge <?= $s['estado']==='ACTIVO'?'text-bg-success':'text-bg-secondary' ?>"><?= htmlspecialchars((string)$s['estado']) ?></span></td>
                     <td class="text-end">
                       <?php if (($s['estado'] ?? '') === 'ACTIVO'): ?>
-                        <form method="POST" action="/usuarios/<?= (int)$u['id'] ?>/scope/<?= (int)$s['id'] ?>/delete" style="display:inline">
+                        <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/scope/<?= (int)$s['id'] ?>/delete" style="display:inline">
                           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
                           <button class="btn btn-sm btn-outline-secondary" type="submit">
                             <i class="bi bi-slash-circle me-1"></i> Desactivar
@@ -106,7 +109,7 @@ $establecimientos = $establecimientos ?? [];
         <hr>
 
         <div class="fw-bold mb-2">Agregar scope</div>
-        <form method="POST" action="/usuarios/<?= (int)$u['id'] ?>/scope" class="row g-2">
+        <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/scope" class="row g-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="col-12 col-lg-6">

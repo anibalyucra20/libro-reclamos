@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -69,10 +70,10 @@ final class EmpresasController extends Controller
     $this->guard();
 
     $data = $this->collectInput();
-
+    $panel = $this->panelPrefix();
     try {
       $id = $this->insert($data);
-      $this->response->redirect('/empresas/' . $id . '?created=1');
+      $this->response->redirect($panel.'/empresas/' . $id . '?created=1');
     } catch (\Throwable $e) {
       $this->view('panel_root/empresas/form', [
         'tenant' => $this->request->tenant,
@@ -90,7 +91,11 @@ final class EmpresasController extends Controller
 
     $id = (int)($this->request->params['id'] ?? 0);
     $row = Empresa::findById($id);
-    if (!$row) { http_response_code(404); echo "No encontrado"; return; }
+    if (!$row) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
 
     $this->view('panel_root/empresas/form', [
       'tenant' => $this->request->tenant,
@@ -108,7 +113,11 @@ final class EmpresasController extends Controller
 
     $id = (int)($this->request->params['id'] ?? 0);
     $row = Empresa::findById($id);
-    if (!$row) { http_response_code(404); echo "No encontrado"; return; }
+    if (!$row) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
 
     $data = $this->collectInput(true);
 
@@ -137,8 +146,8 @@ final class EmpresasController extends Controller
       ':estado' => $data['estado'],
       ':id' => $id,
     ]);
-
-    $this->response->redirect('/empresas/' . $id . '?saved=1');
+ $panel = $this->panelPrefix();
+    $this->response->redirect($panel.'/empresas/' . $id . '?saved=1');
   }
 
   private function collectInput(bool $isUpdate = false): array
@@ -154,7 +163,7 @@ final class EmpresasController extends Controller
     }
 
     $estado = (string)$this->request->input('estado', 'ACTIVO');
-    if (!in_array($estado, ['ACTIVO','INACTIVO'], true)) $estado = 'ACTIVO';
+    if (!in_array($estado, ['ACTIVO', 'INACTIVO'], true)) $estado = 'ACTIVO';
 
     return [
       'ruc' => $ruc,

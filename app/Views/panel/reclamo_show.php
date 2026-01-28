@@ -1,34 +1,38 @@
 <?php
-  $badgeClass = function(string $st): string {
-    return match ($st) {
-      'REGISTRADO' => 'text-bg-secondary',
-      'EN_PROCESO' => 'text-bg-warning',
-      'RESPONDIDO' => 'text-bg-success',
-      'CERRADO'    => 'text-bg-dark',
-      default      => 'text-bg-light',
-    };
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
+<?php
+$badgeClass = function (string $st): string {
+  return match ($st) {
+    'REGISTRADO' => 'text-bg-secondary',
+    'EN_PROCESO' => 'text-bg-warning',
+    'RESPONDIDO' => 'text-bg-success',
+    'CERRADO'    => 'text-bg-dark',
+    default      => 'text-bg-light',
   };
+};
 
-  $st = (string)($reclamo['estado'] ?? '');
-  $canReply = in_array($st, ['REGISTRADO','EN_PROCESO'], true);
+$st = (string)($reclamo['estado'] ?? '');
+$canReply = in_array($st, ['REGISTRADO', 'EN_PROCESO'], true);
 
-  $codigo = htmlspecialchars((string)($reclamo['codigo_reclamo'] ?? ''), ENT_QUOTES, 'UTF-8');
-  $tipo   = htmlspecialchars((string)($reclamo['tipo'] ?? ''), ENT_QUOTES, 'UTF-8');
-  $estado = htmlspecialchars($st, ENT_QUOTES, 'UTF-8');
+$codigo = htmlspecialchars((string)($reclamo['codigo_reclamo'] ?? ''), ENT_QUOTES, 'UTF-8');
+$tipo   = htmlspecialchars((string)($reclamo['tipo'] ?? ''), ENT_QUOTES, 'UTF-8');
+$estado = htmlspecialchars($st, ENT_QUOTES, 'UTF-8');
 
-  $establecimiento = htmlspecialchars((string)($reclamo['establecimiento'] ?? ''), ENT_QUOTES, 'UTF-8');
-  $vence = htmlspecialchars((string)($reclamo['fecha_vencimiento_respuesta'] ?? ''), ENT_QUOTES, 'UTF-8');
+$establecimiento = htmlspecialchars((string)($reclamo['establecimiento'] ?? ''), ENT_QUOTES, 'UTF-8');
+$vence = htmlspecialchars((string)($reclamo['fecha_vencimiento_respuesta'] ?? ''), ENT_QUOTES, 'UTF-8');
 
-  $consumidor = trim((string)($reclamo['consumidor_nombres'] ?? '') . ' ' . (string)($reclamo['consumidor_apellidos'] ?? ''));
-  $consumidor = htmlspecialchars($consumidor, ENT_QUOTES, 'UTF-8');
+$consumidor = trim((string)($reclamo['consumidor_nombres'] ?? '') . ' ' . (string)($reclamo['consumidor_apellidos'] ?? ''));
+$consumidor = htmlspecialchars($consumidor, ENT_QUOTES, 'UTF-8');
 
-  $doc = htmlspecialchars((string)($reclamo['consumidor_doc_tipo'] ?? '') . ': ' . (string)($reclamo['consumidor_doc_num'] ?? ''), ENT_QUOTES, 'UTF-8');
+$doc = htmlspecialchars((string)($reclamo['consumidor_doc_tipo'] ?? '') . ': ' . (string)($reclamo['consumidor_doc_num'] ?? ''), ENT_QUOTES, 'UTF-8');
 
-  $bien = htmlspecialchars((string)($reclamo['bien_contratado'] ?? ''), ENT_QUOTES, 'UTF-8');
-  $detalle = nl2br(htmlspecialchars((string)($reclamo['detalle'] ?? ''), ENT_QUOTES, 'UTF-8'));
-  $pedido  = nl2br(htmlspecialchars((string)($reclamo['pedido'] ?? ''), ENT_QUOTES, 'UTF-8'));
+$bien = htmlspecialchars((string)($reclamo['bien_contratado'] ?? ''), ENT_QUOTES, 'UTF-8');
+$detalle = nl2br(htmlspecialchars((string)($reclamo['detalle'] ?? ''), ENT_QUOTES, 'UTF-8'));
+$pedido  = nl2br(htmlspecialchars((string)($reclamo['pedido'] ?? ''), ENT_QUOTES, 'UTF-8'));
 
-  $id = (int)($reclamo['id'] ?? 0);
+$id = (int)($reclamo['id'] ?? 0);
 ?>
 
 <!-- Header -->
@@ -36,7 +40,7 @@
   <div>
     <nav aria-label="breadcrumb" class="mb-2">
       <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="/reclamos">Reclamos</a></li>
+        <li class="breadcrumb-item"><a href="<?= $__panelPrefix ?>/reclamos">Reclamos</a></li>
         <li class="breadcrumb-item active" aria-current="page"><?= $codigo ?></li>
       </ol>
     </nav>
@@ -55,7 +59,7 @@
   </div>
 
   <div class="d-flex flex-wrap gap-2">
-    <a class="btn btn-outline-secondary" href="/reclamos">
+    <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/reclamos">
       <i class="bi bi-arrow-left me-1"></i> Volver
     </a>
     <?php if ($canReply): ?>
@@ -109,7 +113,7 @@
             Al enviar una respuesta, el estado pasará a <span class="fw-semibold">RESPONDIDO</span>.
           </div>
 
-          <form method="POST" action="/reclamos/<?= $id ?>/responder" class="needs-validation" novalidate>
+          <form method="POST" action="<?= $__panelPrefix ?>/reclamos/<?= $id ?>/responder" class="needs-validation" novalidate>
             <input type="hidden" name="_csrf" value="<?= htmlspecialchars(\App\Services\Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
 
             <label class="form-label">Respuesta <span class="text-danger">*</span></label>
@@ -117,7 +121,7 @@
             <div class="invalid-feedback">La respuesta es requerida.</div>
 
             <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-3">
-              <a class="btn btn-outline-secondary" href="/reclamos/<?= $id ?>">
+              <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>">
                 <i class="bi bi-x-circle me-1"></i> Cancelar
               </a>
               <button type="submit" class="btn btn-primary">
@@ -156,10 +160,10 @@
           <div class="d-grid gap-2">
             <?php foreach ($respuestas as $rr): ?>
               <?php
-                $autor = trim((string)($rr['nombres'] ?? '') . ' ' . (string)($rr['apellidos'] ?? ''));
-                $autor = htmlspecialchars($autor, ENT_QUOTES, 'UTF-8');
-                $fecha = htmlspecialchars((string)($rr['fecha_respuesta'] ?? ''), ENT_QUOTES, 'UTF-8');
-                $resp  = nl2br(htmlspecialchars((string)($rr['respuesta'] ?? ''), ENT_QUOTES, 'UTF-8'));
+              $autor = trim((string)($rr['nombres'] ?? '') . ' ' . (string)($rr['apellidos'] ?? ''));
+              $autor = htmlspecialchars($autor, ENT_QUOTES, 'UTF-8');
+              $fecha = htmlspecialchars((string)($rr['fecha_respuesta'] ?? ''), ENT_QUOTES, 'UTF-8');
+              $resp  = nl2br(htmlspecialchars((string)($rr['respuesta'] ?? ''), ENT_QUOTES, 'UTF-8'));
               ?>
               <div class="border rounded-3 p-3 bg-light">
                 <div class="d-flex justify-content-between gap-2">

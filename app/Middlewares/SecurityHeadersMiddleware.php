@@ -16,8 +16,11 @@ final class SecurityHeadersMiddleware
     header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 
     // CSP básica (ajusta si usas CDNs)
-    $host = $_SERVER['HTTP_HOST'] ?? '';
-    $isPanel = str_contains($host, '.admin.') || str_starts_with($host, 'admin.');
+    $uriPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+
+    // tu panel puede ser /panel o /admin (usa el mismo config que TenantMiddleware si quieres)
+    $panelPath = '/panel';
+    $isPanel = ($uriPath === $panelPath) || str_starts_with($uriPath, $panelPath . '/');
 
     $csp = "default-src 'self'; "
       . "img-src 'self' data: https:; "

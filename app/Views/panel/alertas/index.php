@@ -3,7 +3,10 @@ $cfg = $cfg ?? [];
 $saved = isset($_GET['saved']);
 $tested = isset($_GET['test']);
 ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Alertas</h1>
@@ -21,7 +24,7 @@ $tested = isset($_GET['test']);
 
 <div class="card border-0 shadow-sm">
   <div class="card-body">
-    <form method="POST" action="/alertas" class="row g-3">
+    <form method="POST" action="<?= $__panelPrefix ?>/alertas" class="row g-3">
       <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
 
       <div class="col-12">
@@ -75,7 +78,7 @@ $tested = isset($_GET['test']);
 
     <hr>
 
-    <form method="POST" action="/alertas/probar" class="d-flex gap-2">
+    <form method="POST" action="<?= $__panelPrefix ?>/alertas/probar" class="d-flex gap-2">
       <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
       <button class="btn btn-outline-secondary" type="submit">
         <i class="bi bi-send me-1"></i> Enviar prueba

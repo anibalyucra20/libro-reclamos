@@ -1,11 +1,14 @@
 <?php $rows = $rows ?? []; ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Establecimientos</h1>
     <div class="text-body-secondary">Locales registrados en esta empresa.</div>
   </div>
-  <a class="btn btn-primary" href="/establecimientos/nuevo">
+  <a class="btn btn-primary" href="<?= $__panelPrefix ?>/establecimientos/nuevo">
     <i class="bi bi-plus-circle me-1"></i> Nuevo
   </a>
 </div>
@@ -37,7 +40,7 @@
                 </span>
               </td>
               <td class="text-end pe-3">
-                <a class="btn btn-sm btn-outline-primary" href="/establecimientos/<?= (int)$r['id'] ?>">
+                <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/establecimientos/<?= (int)$r['id'] ?>">
                   <i class="bi bi-pencil-square me-1"></i> Editar
                 </a>
               </td>

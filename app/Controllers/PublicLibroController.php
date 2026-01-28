@@ -317,8 +317,8 @@ final class PublicLibroController extends Controller
       ], 'public');
       return;
     }
-
-    $this->response->redirect('/seguimiento/' . $token);
+ $panel = $this->panelPrefix();
+    $this->response->redirect($panel.'/seguimiento/' . $token);
   }
 
 

@@ -83,10 +83,10 @@ final class EstablecimientosController extends Controller
 
         $data = $this->collectInput();
         $data['empresa_id'] = $empresaId;
-
+ $panel = $this->panelPrefix();
         try {
             $id = $this->insert($data);
-            $this->response->redirect('/establecimientos/' . $id . '?created=1');
+            $this->response->redirect($panel.'/establecimientos/' . $id . '?created=1');
         } catch (\Throwable $e) {
             $this->view('panel/establecimientos/form', [
                 'tenant' => $this->request->tenant,
@@ -137,10 +137,10 @@ final class EstablecimientosController extends Controller
         }
 
         $data = $this->collectInput();
-
+ $panel = $this->panelPrefix();
         try {
             $this->doUpdate($empresaId, $id, $data);
-            $this->response->redirect('/establecimientos/' . $id . '?saved=1');
+            $this->response->redirect($panel.'/establecimientos/' . $id . '?saved=1');
         } catch (\Throwable $e) {
             http_response_code(422);
             echo $e->getMessage();

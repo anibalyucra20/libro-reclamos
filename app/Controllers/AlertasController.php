@@ -111,8 +111,8 @@ final class AlertasController extends Controller
             ':hora_envio' => $horaEnvio,
             ':estado' => $estado,
         ]);
-
-        $this->response->redirect('/alertas?saved=1');
+        $panel = $this->panelPrefix();
+        $this->response->redirect($panel . '/alertas?saved=1');
     }
 
     public function test(): void
@@ -124,7 +124,8 @@ final class AlertasController extends Controller
         $empresaId = (int)$this->request->tenant['empresa_id'];
         $svc = new AlertasReclamosService();
         $svc->runForEmpresa($empresaId);
-        $this->response->redirect('/alertas?test=1');
+        $panel = $this->panelPrefix();
+        $this->response->redirect($panel . '/alertas?test=1');
     }
 
     private function getConfig(int $empresaId): ?array

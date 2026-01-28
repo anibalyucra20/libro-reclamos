@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -73,7 +74,7 @@ final class UsuariosController extends Controller
 
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $svc = new UsuariosService();
-
+    $panel = $this->panelPrefix();
     try {
       $userId = $svc->createUserWithScopeEmpresa($empresaId, [
         'email' => $this->request->input('email'),
@@ -83,7 +84,7 @@ final class UsuariosController extends Controller
         'rol_id' => $this->request->input('rol_id'),
         'establecimiento_id' => $this->request->input('establecimiento_id', ''),
       ]);
-      $this->response->redirect('/usuarios/' . $userId . '?created=1');
+      $this->response->redirect($panel . '/usuarios/' . $userId . '?created=1');
     } catch (\Throwable $e) {
       $this->view('panel/usuarios/form', [
         'tenant' => $this->request->tenant,
@@ -104,7 +105,11 @@ final class UsuariosController extends Controller
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
-    if (!$u) { http_response_code(404); echo "No encontrado"; return; }
+    if (!$u) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
 
     $this->view('panel/usuarios/show', [
       'tenant' => $this->request->tenant,
@@ -128,15 +133,19 @@ final class UsuariosController extends Controller
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
-    if (!$u) { http_response_code(404); echo "No encontrado"; return; }
-
+    if (!$u) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
+    $panel = $this->panelPrefix();
     try {
       $svc->updateUser($id, [
         'nombres' => $this->request->input('nombres'),
         'apellidos' => $this->request->input('apellidos'),
         'estado' => $this->request->input('estado', 'ACTIVO'),
       ]);
-      $this->response->redirect('/usuarios/' . $id . '?saved=1');
+      $this->response->redirect($panel . '/usuarios/' . $id . '?saved=1');
     } catch (\Throwable $e) {
       http_response_code(422);
       echo $e->getMessage();
@@ -152,14 +161,18 @@ final class UsuariosController extends Controller
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
-    if (!$u) { http_response_code(404); echo "No encontrado"; return; }
+    if (!$u) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
 
     $rolId = (int)$this->request->input('rol_id');
     $sidRaw = $this->request->input('establecimiento_id', '');
     $establecimientoId = ($sidRaw === '' ? null : (int)$sidRaw);
-
+    $panel = $this->panelPrefix();
     $svc->addScope($empresaId, $id, $rolId, $establecimientoId);
-    $this->response->redirect('/usuarios/' . $id . '?saved=1');
+    $this->response->redirect($panel . '/usuarios/' . $id . '?saved=1');
   }
 
   public function scopeDelete(): void
@@ -172,10 +185,14 @@ final class UsuariosController extends Controller
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
-    if (!$u) { http_response_code(404); echo "No encontrado"; return; }
-
+    if (!$u) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
+    $panel = $this->panelPrefix();
     $svc->disableScope($empresaId, $id, $scopeId);
-    $this->response->redirect('/usuarios/' . $id . '?saved=1');
+    $this->response->redirect($panel . '/usuarios/' . $id . '?saved=1');
   }
 
   public function resetPassword(): void
@@ -187,11 +204,15 @@ final class UsuariosController extends Controller
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
-    if (!$u) { http_response_code(404); echo "No encontrado"; return; }
-
+    if (!$u) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
+    $panel = $this->panelPrefix();
     try {
       $svc->resetPassword($id, (string)$this->request->input('password'));
-      $this->response->redirect('/usuarios/' . $id . '?pwd=1');
+      $this->response->redirect($panel . '/usuarios/' . $id . '?pwd=1');
     } catch (\Throwable $e) {
       http_response_code(422);
       echo $e->getMessage();

@@ -2,7 +2,10 @@
 $roles = $roles ?? [];
 $establecimientos = $establecimientos ?? [];
 ?>
-
+<?php
+$__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
+if ($__panelPrefix === '') $__panelPrefix = '/panel';
+?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h1 class="h3 fw-bold mb-1">Nuevo usuario</h1>
@@ -17,7 +20,7 @@ $establecimientos = $establecimientos ?? [];
 
 <div class="card border-0 shadow-sm">
   <div class="card-body">
-    <form method="POST" action="/usuarios" class="row g-3">
+    <form method="POST" action="<?= $__panelPrefix ?>/usuarios" class="row g-3">
       <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
 
       <div class="col-12 col-lg-6">
@@ -63,7 +66,7 @@ $establecimientos = $establecimientos ?? [];
 
       <div class="col-12 d-flex gap-2">
         <button class="btn btn-primary" type="submit"><i class="bi bi-save me-1"></i> Crear</button>
-        <a class="btn btn-outline-secondary" href="/usuarios">Cancelar</a>
+        <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/usuarios">Cancelar</a>
       </div>
     </form>
   </div>
