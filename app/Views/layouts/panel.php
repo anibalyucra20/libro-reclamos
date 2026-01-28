@@ -1,5 +1,41 @@
+<?php
+
+use App\Services\Auth;
+use App\Services\ACL;
+use App\Services\Csrf;
+
+$__csrf = Csrf::token();
+$__user = Auth::user();
+$__empresaId = (int)($tenant['empresa_id'] ?? 0);
+
+$__canExport = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'reclamos.exportar', $__empresaId, null)
+  : false;
+
+$__canReportes = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'reclamos.reportes', $__empresaId, null)
+  : false;
+$__canAlertas = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'empresas.gestionar', $__empresaId, null)
+  : false;
+
+$__canUsuarios = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'usuarios.gestionar', $__empresaId, null)
+  : false;
+
+$__canEstab = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'establecimientos.gestionar', $__empresaId, null)
+  : false;
+$__canEmpresasGlobal = $__user ? ACL::can((int)$__user['id'], 'empresas.gestionar', null, null) : false;
+
+
+// helper para activar item actual
+$__path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+?>
+
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -11,56 +47,57 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <style>
-    :root{
+    :root {
       --app-bg: #f6f7fb;
       --border: rgba(15, 23, 42, .10);
       --shadow: 0 10px 30px rgba(2, 6, 23, .08);
     }
-    body{
+
+    body {
       background:
-        radial-gradient(1100px 600px at 15% -10%, rgba(13,110,253,.12), transparent 55%),
-        radial-gradient(900px 500px at 90% 0%, rgba(25,135,84,.10), transparent 55%),
+        radial-gradient(1100px 600px at 15% -10%, rgba(13, 110, 253, .12), transparent 55%),
+        radial-gradient(900px 500px at 90% 0%, rgba(25, 135, 84, .10), transparent 55%),
         var(--app-bg);
     }
 
-    .app-shell{
+    .app-shell {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .topbar{
+    .topbar {
       position: sticky;
       top: 0;
       z-index: 1030;
       backdrop-filter: blur(10px);
-      background: rgba(255,255,255,.85) !important;
+      background: rgba(255, 255, 255, .85) !important;
       border-bottom: 1px solid var(--border);
     }
 
-    .brand-badge{
+    .brand-badge {
       width: 34px;
       height: 34px;
       border-radius: 12px;
       background: linear-gradient(135deg, #0d6efd, #66b2ff);
-      box-shadow: 0 10px 20px rgba(13,110,253,.20);
+      box-shadow: 0 10px 20px rgba(13, 110, 253, .20);
       display: inline-block;
     }
 
-    .layout{
+    .layout {
       flex: 1;
       display: grid;
       grid-template-columns: 280px 1fr;
     }
 
-    .sidebar{
+    .sidebar {
       border-right: 1px solid var(--border);
-      background: rgba(255,255,255,.75);
+      background: rgba(255, 255, 255, .75);
       backdrop-filter: blur(10px);
       padding: 14px;
     }
 
-    .sidebar-card{
+    .sidebar-card {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 1rem;
@@ -68,11 +105,11 @@
       padding: 12px;
     }
 
-    .main{
+    .main {
       padding: 18px 16px 26px;
     }
 
-    .main-card{
+    .main-card {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 1rem;
@@ -80,7 +117,7 @@
       padding: 16px;
     }
 
-    .nav-pill{
+    .nav-pill {
       border-radius: .9rem;
       padding: .55rem .75rem;
       display: flex;
@@ -90,22 +127,32 @@
       text-decoration: none;
       border: 1px solid transparent;
     }
-    .nav-pill:hover{
-      background: rgba(13,110,253,.06);
-      border-color: rgba(13,110,253,.10);
+
+    .nav-pill:hover {
+      background: rgba(13, 110, 253, .06);
+      border-color: rgba(13, 110, 253, .10);
     }
-    .nav-pill.active{
-      background: rgba(13,110,253,.12);
-      border-color: rgba(13,110,253,.18);
+
+    .nav-pill.active {
+      background: rgba(13, 110, 253, .12);
+      border-color: rgba(13, 110, 253, .18);
       color: #0b5ed7;
       font-weight: 700;
     }
 
     /* responsive: sidebar a offcanvas en móvil */
-    @media (max-width: 991.98px){
-      .layout{ grid-template-columns: 1fr; }
-      .sidebar{ display: none; }
-      .main{ padding-top: 14px; }
+    @media (max-width: 991.98px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        padding-top: 14px;
+      }
     }
   </style>
 </head>
@@ -118,7 +165,7 @@
       <div class="container-fluid px-3 px-lg-4">
         <div class="d-flex align-items-center gap-2">
           <button class="btn btn-outline-secondary d-lg-none" type="button"
-                  data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
+            data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
             <i class="bi bi-list"></i>
           </button>
 
@@ -140,6 +187,16 @@
           <a class="btn btn-sm btn-outline-primary" href="/reclamos">
             <i class="bi bi-inbox me-1"></i> Reclamos
           </a>
+          <?php if ($__user): ?>
+            <form method="POST" action="/logout" class="d-inline">
+              <input type="hidden" name="_csrf" value="<?= htmlspecialchars($__csrf, ENT_QUOTES, 'UTF-8') ?>">
+              <button class="btn btn-sm btn-outline-danger" type="submit">
+                <i class="bi bi-box-arrow-right me-1"></i> Salir
+              </button>
+            </form>
+          <?php endif; ?>
+
+
           <!-- Si tienes logout:
           <a class="btn btn-sm btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right me-1"></i> Salir</a>
           -->
@@ -155,9 +212,44 @@
       </div>
       <div class="offcanvas-body">
         <div class="d-grid gap-2">
-          <a class="nav-pill active" href="/reclamos">
+          <a class="nav-pill <?= str_starts_with($__path, '/reclamos') ? 'active' : '' ?>" href="/reclamos">
             <i class="bi bi-inbox"></i> Reclamos
           </a>
+
+          <!-- <?php if ($__canExport): ?>
+            <a class="nav-pill <?= $__path === '/reclamos/exportar' ? 'active' : '' ?>"
+              href="/reclamos/exportar?desde=<?= date('Y-m-01') ?>&hasta=<?= date('Y-m-d') ?>">
+              <i class="bi bi-download"></i> Exportar CSV
+            </a>
+          <?php endif; ?> -->
+
+          <?php if ($__canReportes): ?>
+            <a class="nav-pill <?= str_starts_with($__path, '/reportes') ? 'active' : '' ?>" href="/reportes">
+              <i class="bi bi-graph-up"></i> Reportes
+            </a>
+          <?php endif; ?>
+          <?php if ($__canAlertas): ?>
+            <a class="nav-pill <?= str_starts_with($__path, '/alertas') ? 'active' : '' ?>" href="/alertas">
+              <i class="bi bi-bell"></i> Alertas
+            </a>
+          <?php endif; ?>
+          <?php if ($__canUsuarios): ?>
+            <a class="nav-pill <?= str_starts_with($__path, '/usuarios') ? 'active' : '' ?>" href="/usuarios">
+              <i class="bi bi-people"></i> Usuarios
+            </a>
+          <?php endif; ?>
+          <?php if (($tenant['mode'] ?? '') === 'panel_root' && $__canEmpresasGlobal): ?>
+            <a class="nav-pill <?= str_starts_with($__path, '/empresas') ? 'active' : '' ?>" href="/empresas">
+              <i class="bi bi-buildings"></i> Empresas
+            </a>
+          <?php endif; ?>
+
+          <?php if ($__canEstab): ?>
+            <a class="nav-pill <?= str_starts_with($__path, '/establecimientos') ? 'active' : '' ?>" href="/establecimientos">
+              <i class="bi bi-geo"></i> Establecimientos
+            </a>
+          <?php endif; ?>
+
           <!-- Agrega aquí más links si existen -->
         </div>
         <hr>
@@ -175,12 +267,46 @@
           </div>
 
           <div class="d-grid gap-2">
-            <a class="nav-pill active" href="/reclamos">
+            <a class="nav-pill <?= str_starts_with($__path, '/reclamos') ? 'active' : '' ?>" href="/reclamos">
               <i class="bi bi-inbox"></i> Reclamos
             </a>
+
+            <!-- <?php if ($__canExport): ?>
+              <a class="nav-pill <?= $__path === '/reclamos/exportar' ? 'active' : '' ?>"
+                href="/reclamos/exportar?desde=<?= date('Y-m-01') ?>&hasta=<?= date('Y-m-d') ?>">
+                <i class="bi bi-download"></i> Exportar CSV
+              </a>
+            <?php endif; ?>-->
+
+            <?php if ($__canReportes): ?>
+              <a class="nav-pill <?= str_starts_with($__path, '/reportes') ? 'active' : '' ?>" href="/reportes">
+                <i class="bi bi-graph-up"></i> Reportes
+              </a>
+            <?php endif; ?>
+            <?php if ($__canAlertas): ?>
+              <a class="nav-pill <?= str_starts_with($__path, '/alertas') ? 'active' : '' ?>" href="/alertas">
+                <i class="bi bi-bell"></i> Alertas
+              </a>
+            <?php endif; ?>
+            <?php if ($__canUsuarios): ?>
+              <a class="nav-pill <?= str_starts_with($__path, '/usuarios') ? 'active' : '' ?>" href="/usuarios">
+                <i class="bi bi-people"></i> Usuarios
+              </a>
+            <?php endif; ?>
+            <?php if (($tenant['mode'] ?? '') === 'panel_root' && $__canEmpresasGlobal): ?>
+              <a class="nav-pill <?= str_starts_with($__path, '/empresas') ? 'active' : '' ?>" href="/empresas">
+                <i class="bi bi-buildings"></i> Empresas
+              </a>
+            <?php endif; ?>
+
+            <?php if ($__canEstab): ?>
+              <a class="nav-pill <?= str_starts_with($__path, '/establecimientos') ? 'active' : '' ?>" href="/establecimientos">
+                <i class="bi bi-geo"></i> Establecimientos
+              </a>
+            <?php endif; ?>
+
             <!-- Agrega aquí más items si existen:
             <a class="nav-pill" href="/establecimientos"><i class="bi bi-geo"></i> Establecimientos</a>
-            <a class="nav-pill" href="/usuarios"><i class="bi bi-people"></i> Usuarios</a>
             -->
           </div>
 
@@ -211,6 +337,7 @@
 
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

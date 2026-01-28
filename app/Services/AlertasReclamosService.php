@@ -11,13 +11,11 @@ final class AlertasReclamosService
 {
     private PDO $pdo;
     private Logger $logger;
-    private Mailer $mailer;
 
     public function __construct()
     {
         $this->pdo = DB::pdo();
         $this->logger = new Logger();
-        $this->mailer = new Mailer();
     }
 
     public function run(): array
@@ -29,8 +27,15 @@ final class AlertasReclamosService
             'items_vencidos' => 0,
         ];
 
-        $empresas = $this->pdo->query("SELECT id, razon_social, slug, email_contacto FROM empresas WHERE estado='ACTIVO'")
-            ->fetchAll(PDO::FETCH_ASSOC);
+        $sqlEmp = "SELECT id, razon_social, slug, email_contacto FROM empresas WHERE estado='ACTIVO'";
+        if (!empty($opts['empresa_id'])) {
+            $sqlEmp .= " AND id = :eid";
+            $st = $this->pdo->prepare($sqlEmp);
+            $st->execute([':eid' => (int)$opts['empresa_id']]);
+            $empresas = $st->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $empresas = $this->pdo->query($sqlEmp)->fetchAll(PDO::FETCH_ASSOC);
+        }
 
         foreach ($empresas as $emp) {
             $empresaId = (int)$emp['id'];
@@ -44,17 +49,21 @@ final class AlertasReclamosService
             if (!$emails) continue;
 
             $diasAntes = (int)$cfg['dias_antes'];
+            $hora = (string)($cfg['hora_envio'] ?? '09:00');
+            if (!$this->isHoraEnvio($hora)) {
+                continue;
+            }
 
             $porVencer = [];
             if ((int)$cfg['alertar_por_vencer'] === 1) {
                 $porVencer = $this->getPorVencer($empresaId, $diasAntes);
-                $porVencer = $this->filtrarNoEnviados($empresaId, $porVencer, 'POR_VENCER');
+                //$porVencer = $this->filtrarNoEnviados($empresaId, $porVencer, 'POR_VENCER');
             }
 
             $vencidos = [];
             if ((int)$cfg['alertar_vencidos'] === 1) {
                 $vencidos = $this->getVencidos($empresaId);
-                $vencidos = $this->filtrarNoEnviados($empresaId, $vencidos, 'VENCIDO');
+                //$vencidos = $this->filtrarNoEnviados($empresaId, $vencidos, 'VENCIDO');
             }
 
             if (!$porVencer && !$vencidos) {
@@ -95,16 +104,23 @@ final class AlertasReclamosService
 
     private function getPorVencer(int $empresaId, int $diasAntes): array
     {
+        if ($diasAntes < 0) $diasAntes = 0;
+
         $sql = "
-            SELECT r.id, r.codigo_reclamo, r.tipo, r.estado, r.fecha_registro, r.fecha_vencimiento_respuesta,
-                   e.nombre AS establecimiento_nombre
-            FROM reclamos r
-            JOIN establecimientos e ON e.id = r.establecimiento_id
-            WHERE r.empresa_id = :empresa_id
-              AND r.estado IN ('REGISTRADO','EN_PROCESO')
-              AND r.fecha_vencimiento_respuesta = DATE_ADD(CURDATE(), INTERVAL :dias_antes DAY)
-            ORDER BY r.fecha_vencimiento_respuesta ASC
-        ";
+        SELECT r.id, r.codigo_reclamo, r.tipo, r.estado, r.fecha_registro, r.fecha_vencimiento_respuesta,
+               e.nombre AS establecimiento_nombre
+        FROM reclamos r
+        JOIN establecimientos e ON e.id = r.establecimiento_id
+        LEFT JOIN alertas_envios ae
+          ON ae.empresa_id = r.empresa_id
+         AND ae.reclamo_id = r.id
+         AND ae.tipo = 'POR_VENCER'
+        WHERE r.empresa_id = :empresa_id
+          AND r.estado IN ('REGISTRADO','EN_PROCESO')
+          AND r.fecha_vencimiento_respuesta BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :dias_antes DAY)
+          AND ae.id IS NULL
+        ORDER BY r.fecha_vencimiento_respuesta ASC
+    ";
         $st = $this->pdo->prepare($sql);
         $st->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
         $st->bindValue(':dias_antes', $diasAntes, PDO::PARAM_INT);
@@ -112,22 +128,29 @@ final class AlertasReclamosService
         return $st->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
     private function getVencidos(int $empresaId): array
     {
         $sql = "
-            SELECT r.id, r.codigo_reclamo, r.tipo, r.estado, r.fecha_registro, r.fecha_vencimiento_respuesta,
-                   e.nombre AS establecimiento_nombre
-            FROM reclamos r
-            JOIN establecimientos e ON e.id = r.establecimiento_id
-            WHERE r.empresa_id = :empresa_id
-              AND r.estado IN ('REGISTRADO','EN_PROCESO')
-              AND r.fecha_vencimiento_respuesta < CURDATE()
-            ORDER BY r.fecha_vencimiento_respuesta ASC
-        ";
+        SELECT r.id, r.codigo_reclamo, r.tipo, r.estado, r.fecha_registro, r.fecha_vencimiento_respuesta,
+               e.nombre AS establecimiento_nombre
+        FROM reclamos r
+        JOIN establecimientos e ON e.id = r.establecimiento_id
+        LEFT JOIN alertas_envios ae
+          ON ae.empresa_id = r.empresa_id
+         AND ae.reclamo_id = r.id
+         AND ae.tipo = 'VENCIDO'
+        WHERE r.empresa_id = :empresa_id
+          AND r.estado IN ('REGISTRADO','EN_PROCESO')
+          AND r.fecha_vencimiento_respuesta < CURDATE()
+          AND ae.id IS NULL
+        ORDER BY r.fecha_vencimiento_respuesta ASC
+    ";
         $st = $this->pdo->prepare($sql);
         $st->execute([':empresa_id' => $empresaId]);
         return $st->fetchAll(PDO::FETCH_ASSOC);
     }
+
 
     private function filtrarNoEnviados(int $empresaId, array $rows, string $tipo): array
     {
@@ -164,6 +187,12 @@ final class AlertasReclamosService
         ]);
     }
 
+    public function runForEmpresa(int $empresaId): array
+    {
+        return $this->run(['empresa_id' => $empresaId]);
+    }
+
+
     private function parseEmails(string $emails): array
     {
         $parts = array_filter(array_map('trim', explode(',', $emails)));
@@ -176,12 +205,15 @@ final class AlertasReclamosService
 
     private function isHoraEnvio(string $hhmm): bool
     {
-        $now = new \DateTime('now');
-        $target = \DateTime::createFromFormat('H:i', $hhmm);
+        $tz = 'America/Lima';
+        $now = new \DateTime('now', new \DateTimeZone($tz));
+
+        $target = \DateTime::createFromFormat('H:i', $hhmm, new \DateTimeZone($tz));
         if (!$target) return true;
-        // misma hora y mismo minuto
+
         return $now->format('H:i') === $target->format('H:i');
     }
+
 
 
     private function renderEmailHtml(array $empresa, int $diasAntes, array $porVencer, array $vencidos): string

@@ -1,22 +1,36 @@
 <?php
-  $estado = (string)($estado ?? '');
 
-  $badgeClass = function(string $st): string {
-    return match ($st) {
-      'REGISTRADO' => 'text-bg-secondary',
-      'EN_PROCESO' => 'text-bg-warning',
-      'RESPONDIDO' => 'text-bg-success',
-      'CERRADO'    => 'text-bg-dark',
-      default      => 'text-bg-light',
-    };
-  };
+use App\Services\Auth;
+use App\Services\ACL;
 
-  $fmt = function($v): string {
-    $s = (string)$v;
-    if ($s === '') return '-';
-    // Si viene como "YYYY-MM-DD HH:MM:SS", lo dejamos legible sin romper nada
-    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+$__user = Auth::user();
+$__empresaId = (int)($tenant['empresa_id'] ?? 0);
+
+$__canExport = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'reclamos.exportar', $__empresaId, null)
+  : false;
+
+$estado = (string)($estado ?? '');
+$tipo  = (string)($tipo ?? '');
+$desde = (string)($desde ?? date('Y-m-01'));
+$hasta = (string)($hasta ?? date('Y-m-d'));
+
+$badgeClass = function (string $st): string {
+  return match ($st) {
+    'REGISTRADO' => 'text-bg-secondary',
+    'EN_PROCESO' => 'text-bg-warning',
+    'RESPONDIDO' => 'text-bg-success',
+    'CERRADO'    => 'text-bg-dark',
+    default      => 'text-bg-light',
   };
+};
+
+$fmt = function ($v): string {
+  $s = (string)$v;
+  if ($s === '') return '-';
+  // Si viene como "YYYY-MM-DD HH:MM:SS", lo dejamos legible sin romper nada
+  return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+};
 ?>
 
 <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-3">
@@ -32,23 +46,57 @@
       <label class="form-label mb-1">Estado</label>
       <select class="form-select" name="estado" style="min-width: 220px;">
         <option value="" <?= $estado === '' ? 'selected' : '' ?>>Todos</option>
-        <?php foreach (['REGISTRADO','EN_PROCESO','RESPONDIDO','CERRADO'] as $st): ?>
+        <?php foreach (['REGISTRADO', 'EN_PROCESO', 'RESPONDIDO', 'CERRADO'] as $st): ?>
           <option value="<?= $st ?>" <?= ($estado === $st ? 'selected' : '') ?>>
             <?= htmlspecialchars($st) ?>
           </option>
         <?php endforeach; ?>
       </select>
     </div>
+    <div>
+      <label class="form-label mb-1">Tipo</label>
+      <select class="form-select" name="tipo" style="min-width: 180px;">
+        <option value="" <?= $tipo === '' ? 'selected' : '' ?>>Todos</option>
+        <option value="RECLAMO" <?= $tipo === 'RECLAMO' ? 'selected' : '' ?>>RECLAMO</option>
+        <option value="QUEJA" <?= $tipo === 'QUEJA' ? 'selected' : '' ?>>QUEJA</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="form-label mb-1">Desde</label>
+      <input class="form-control" type="date" name="desde" value="<?= htmlspecialchars($desde, ENT_QUOTES, 'UTF-8') ?>">
+    </div>
+
+    <div>
+      <label class="form-label mb-1">Hasta</label>
+      <input class="form-control" type="date" name="hasta" value="<?= htmlspecialchars($hasta, ENT_QUOTES, 'UTF-8') ?>">
+    </div>
+
 
     <div class="d-flex gap-2">
       <button type="submit" class="btn btn-primary">
         <i class="bi bi-funnel me-1"></i> Filtrar
       </button>
-
       <a class="btn btn-outline-secondary" href="/reclamos">
         <i class="bi bi-x-circle me-1"></i> Limpiar
       </a>
+
+      <?php if ($__canExport): ?>
+        <?php
+        $qs = [];
+        if ($estado !== '') $qs['estado'] = $estado;
+        if ($tipo !== '') $qs['tipo'] = $tipo;
+        if ($desde !== '') $qs['desde'] = $desde;
+        if ($hasta !== '') $qs['hasta'] = $hasta;
+        $exportUrl = '/reclamos/exportar?' . http_build_query($qs);
+
+        ?>
+        <a class="btn btn-outline-success" href="<?= htmlspecialchars($exportUrl, ENT_QUOTES, 'UTF-8') ?>">
+          <i class="bi bi-file-earmark-excel me-1"></i> Exportar Excel
+        </a>
+      <?php endif; ?>
     </div>
+
   </form>
 </div>
 
@@ -80,8 +128,8 @@
           <?php else: ?>
             <?php foreach ($reclamos as $r): ?>
               <?php
-                $id = (int)$r['id'];
-                $st = (string)$r['estado'];
+              $id = (int)$r['id'];
+              $st = (string)$r['estado'];
               ?>
               <tr>
                 <td class="ps-3 fw-semibold">

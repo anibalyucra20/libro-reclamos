@@ -11,74 +11,100 @@ final class TenantMiddleware
   public function handle(Request $request): void
   {
     $app = require dirname(__DIR__) . '/Config/app.php';
-    $adminSub = strtolower($app['admin_subdomain'] ?? 'admin');
+
+    // panel por PATH
+    $panelPath   = trim((string)($app['panel_path'] ?? 'panel'), '/'); // 'panel' o 'admin'
+    $panelPrefix = '/' . $panelPath;
+
+    // dominio raíz
+    $rootDomain = strtolower((string)($app['root_domain'] ?? ($_ENV['ROOT_DOMAIN'] ?? '')));
 
     $host = strtolower($request->host());
-    $host = explode(':', $host)[0]; // quitar puerto
+    $host = explode(':', $host)[0];
 
-    // DEV localhost/IP: usar TENANT_SLUG + MODE
+    $uri  = $_SERVER['REQUEST_URI'] ?? '/';
+    $path = parse_url($uri, PHP_URL_PATH) ?: '/';
+    $path = rtrim($path, '/') ?: '/';
+
+    $isPanelPath = function (string $p) use ($panelPrefix): bool {
+      return $p === $panelPrefix || str_starts_with($p, $panelPrefix . '/');
+    };
+
+    // DEV localhost/IP (igual que antes, pero panel_root también posible)
     if ($host === 'localhost' || filter_var($host, FILTER_VALIDATE_IP)) {
-      $mode = $_ENV['DEV_MODE'] ?? 'public'; // public|panel
+      $mode = $_ENV['DEV_MODE'] ?? 'public'; // public|panel|panel_root
       $slug = $_ENV['TENANT_SLUG'] ?? '';
+
+      if ($mode === 'panel_root') {
+        $request->tenant = ['mode' => 'panel_root', 'panel_prefix' => $panelPrefix, 'mount' => $panelPrefix];
+        return;
+      }
+
       if ($slug === '') {
-        $request->tenant = ['mode' => 'dev_no_tenant'];
+        $request->tenant = ['mode' => 'dev_no_tenant', 'panel_prefix' => $panelPrefix, 'mount' => ''];
         return;
       }
-      if ($mode === 'panel') {
-        $empresa = Empresa::findBySlug($slug);
-        if (!$empresa) { http_response_code(404); echo "Tenant no encontrado"; exit; }
-        $request->tenant = ['mode'=>'panel','empresa'=>$empresa,'empresa_id'=>(int)$empresa['id']];
-        return;
-      }
+
       $empresa = Empresa::findBySlug($slug);
-      if (!$empresa) { http_response_code(404); echo "Tenant no encontrado"; exit; }
-      $request->tenant = ['mode'=>'public','empresa'=>$empresa,'empresa_id'=>(int)$empresa['id']];
+      if (!$empresa) { http_response_code(404); echo "Empresa no encontrada"; exit; }
+
+      $request->tenant = [
+        'mode' => ($mode === 'panel') ? 'panel' : 'public',
+        'empresa_id' => (int)$empresa['id'],
+        'empresa_slug' => $empresa['slug'],
+        'razon_social' => $empresa['razon_social'],
+        'nombre_comercial' => $empresa['nombre_comercial'],
+        'panel_prefix' => $panelPrefix,
+        'mount' => ($mode === 'panel') ? $panelPrefix : '',
+      ];
       return;
     }
 
+    // 1) Dominio raíz: websigi.com  (marketing o panel_root por path)
+    if ($rootDomain !== '' && ($host === $rootDomain || $host === 'www.' . $rootDomain)) {
+      if ($isPanelPath($path)) {
+        $request->tenant = ['mode' => 'panel_root', 'panel_prefix' => $panelPrefix, 'mount' => $panelPrefix];
+        return;
+      }
+      $request->tenant = ['mode' => 'marketing', 'panel_prefix' => $panelPrefix, 'mount' => ''];
+      return;
+    }
+
+    // 2) Subdominio 1 nivel: tenant.websigi.com
+    // tenant = primer label del host
     $parts = explode('.', $host);
+    $sub1  = $parts[0] ?? '';
 
-    // Necesitamos al menos 3 labels para empresa.admin.dominio
-    // Ej: empresa1.admin.tudominio.com => [empresa1, admin, tudominio, com]
-    $sub1 = $parts[0] ?? '';
-    $sub2 = $parts[1] ?? '';
+    // Evitar casos comunes
+    if ($sub1 === '' || $sub1 === 'www') {
+      $request->tenant = ['mode' => 'unknown', 'panel_prefix' => $panelPrefix, 'mount' => ''];
+      return;
+    }
 
-    // Caso PANEL por empresa: {empresa}.{admin}.dominio
-    if ($sub2 === $adminSub && $sub1 !== '') {
-      $empresa = Empresa::findBySlug($sub1);
-      if (!$empresa) { http_response_code(404); echo "Empresa no encontrada"; exit; }
+    $empresa = Empresa::findBySlug($sub1);
+    if (!$empresa) { http_response_code(404); echo "Empresa no encontrada"; exit; }
 
+    if ($isPanelPath($path)) {
       $request->tenant = [
         'mode' => 'panel',
         'empresa_id' => (int)$empresa['id'],
         'empresa_slug' => $empresa['slug'],
         'razon_social' => $empresa['razon_social'],
         'nombre_comercial' => $empresa['nombre_comercial'],
+        'panel_prefix' => $panelPrefix,
+        'mount' => $panelPrefix, // sirve para "strip" luego
       ];
       return;
     }
 
-    // Caso PANEL raíz: admin.dominio
-    if ($sub1 === $adminSub) {
-      $request->tenant = ['mode' => 'panel_root'];
-      return;
-    }
-
-    // Caso PÚBLICO: empresa.dominio
-    if ($sub1 !== '') {
-      $empresa = Empresa::findBySlug($sub1);
-      if (!$empresa) { http_response_code(404); echo "Empresa no encontrada"; exit; }
-
-      $request->tenant = [
-        'mode' => 'public',
-        'empresa_id' => (int)$empresa['id'],
-        'empresa_slug' => $empresa['slug'],
-        'razon_social' => $empresa['razon_social'],
-        'nombre_comercial' => $empresa['nombre_comercial'],
-      ];
-      return;
-    }
-
-    $request->tenant = ['mode' => 'unknown'];
+    $request->tenant = [
+      'mode' => 'public',
+      'empresa_id' => (int)$empresa['id'],
+      'empresa_slug' => $empresa['slug'],
+      'razon_social' => $empresa['razon_social'],
+      'nombre_comercial' => $empresa['nombre_comercial'],
+      'panel_prefix' => $panelPrefix,
+      'mount' => '',
+    ];
   }
 }

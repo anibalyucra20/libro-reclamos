@@ -11,6 +11,14 @@ use App\Models\Usuario;
 
 final class AuthController extends Controller
 {
+  private function panelPrefix(): string
+  {
+    $p = (string)($this->request->tenant['panel_prefix'] ?? '/panel');
+    if ($p === '') $p = '/panel';
+    if ($p[0] !== '/') $p = '/' . $p;
+    return rtrim($p, '/');
+  }
+
   public function form(): void
   {
     $this->view('panel.login', [
@@ -23,7 +31,6 @@ final class AuthController extends Controller
   {
     $ip = $_SERVER['REMOTE_ADDR'] ?? null;
 
-    // 1) rate-limit check (si está lockeado, corta)
     RateLimiter::checkOrFail($ip);
 
     $email = trim((string)$this->request->input('email'));
@@ -40,47 +47,54 @@ final class AuthController extends Controller
       return;
     }
 
-    // login OK => limpiar attempts
     RateLimiter::clear($ip);
 
-    // 2) Redirección
     $mode = $this->request->tenant['mode'] ?? '';
+    $panel = $this->panelPrefix();
 
+    // Panel empresa: SIEMPRE bajo /panel
     if ($mode === 'panel') {
-      $this->response->redirect('/reclamos');
+      $this->response->redirect($panel . '/reclamos');
       return;
     }
 
+    // Panel root: quedarse en websigi.com/panel
     if ($mode === 'panel_root') {
       $u = Auth::user();
-      $slug = Usuario::firstEmpresaSlugForUser((int)$u['id']);
 
+      // Superadmin global => /panel/empresas
+      if (\App\Services\ACL::can((int)$u['id'], 'empresas.gestionar', null, null)) {
+        $this->response->redirect($panel . '/empresas');
+        return;
+      }
+
+      // Usuario no superadmin => mandarlo al primer tenant asignado, pero SIN sub-subdominio
+      $slug = Usuario::firstEmpresaSlugForUser((int)$u['id']);
       if (!$slug) {
         http_response_code(403);
         echo "No tienes empresas asignadas.";
         return;
       }
 
-      // construir URL: {slug}.{ADMIN_SUBDOMAIN}.dominio actual
-      $adminSub = $_ENV['ADMIN_SUBDOMAIN'] ?? 'admin';
+      // Construir URL: {slug}.BASE_DOMAIN/panel/reclamos
+      // BASE_DOMAIN lo sacamos de root_domain si existe, si no del host actual quitando "www."
+      $rootDomain = (string)($_ENV['ROOT_DOMAIN'] ?? '');
       $host = strtolower($_SERVER['HTTP_HOST'] ?? '');
       $host = explode(':', $host)[0];
-
-      // host actual = admin.tudominio.com => quitar "admin."
-      $baseDomain = preg_replace('/^' . preg_quote($adminSub, '/') . '\./', '', $host);
+      $baseDomain = $rootDomain !== '' ? $rootDomain : preg_replace('/^www\./', '', $host);
 
       $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-      $this->response->redirect($scheme . '://' . $slug . '.' . $adminSub . '.' . $baseDomain . '/reclamos');
+      $this->response->redirect($scheme . '://' . $slug . '.' . $baseDomain . $panel . '/reclamos');
       return;
     }
 
     // fallback
-    $this->response->redirect('/login');
+    $this->response->redirect($this->panelPrefix() . '/login');
   }
 
   public function logout(): void
   {
     Auth::logout();
-    $this->response->redirect('/login');
+    $this->response->redirect($this->panelPrefix() . '/login');
   }
 }

@@ -22,7 +22,10 @@ final class App
     // Middlewares globales
     (new TenantMiddleware())->handle($request); // resuelve tenant por subdominio
     (new CsrfMiddleware())->handle($request);   // valida CSRF en métodos mutadores
-
+    // Landing principal (websigi.com)
+    if (($request->tenant['mode'] ?? '') === 'marketing') {
+      $router->get('/', 'App\\Controllers\\MarketingController@home');
+    }
     // Rutas públicas (empresa.tudominio.com)
     if (($request->tenant['mode'] ?? '') === 'public') {
       $router->get('/', 'App\\Controllers\\PublicLibroController@home');
@@ -33,7 +36,6 @@ final class App
       $router->get('/seguimiento', 'App\\Controllers\\PublicLibroController@seguimientoForm');
       $router->post('/seguimiento/buscar', 'App\\Controllers\\PublicLibroController@seguimientoBuscar');
       $router->get('/constancia/{token}/pdf', 'App\\Controllers\\PublicLibroController@constanciaPdf');
-
     }
 
     // Rutas panel por empresa (empresa.admin.tudominio.com)
@@ -42,17 +44,65 @@ final class App
       $router->post('/login', 'App\\Controllers\\AuthController@login');
       $router->post('/logout', 'App\\Controllers\\AuthController@logout');
 
+      $router->get('/reportes', 'App\\Controllers\\ReportesReclamosController@index');
+      $router->get('/reportes/data', 'App\\Controllers\\ReportesReclamosController@data');
+
+
       // Requiere auth
       // (lo aplicamos dentro del controller por ahora; en Parte 5 lo hacemos middleware por grupo)
       $router->get('/reclamos',              'App\\Controllers\\PanelReclamosController@index');
+      $router->get('/reclamos/exportar', 'App\\Controllers\\ExportReclamosController@xlsx');
       $router->get('/reclamos/{id}',         'App\\Controllers\\PanelReclamosController@show');
       $router->post('/reclamos/{id}/responder', 'App\\Controllers\\PanelReclamosController@responder');
+
+      $router->get('/alertas', 'App\\Controllers\\AlertasController@index');
+      $router->post('/alertas', 'App\\Controllers\\AlertasController@save');
+      $router->post('/alertas/probar', 'App\\Controllers\\AlertasController@test');
+
+
+
+      $router->get('/usuarios', 'App\\Controllers\\UsuariosController@index');
+      $router->get('/usuarios/nuevo', 'App\\Controllers\\UsuariosController@nuevo');
+      $router->post('/usuarios', 'App\\Controllers\\UsuariosController@crear');
+
+      $router->get('/usuarios/{id}', 'App\\Controllers\\UsuariosController@show');
+      $router->post('/usuarios/{id}', 'App\\Controllers\\UsuariosController@update');
+
+      $router->post('/usuarios/{id}/scope', 'App\\Controllers\\UsuariosController@scopeAdd');
+      $router->post('/usuarios/{id}/scope/{scope_id}/delete', 'App\\Controllers\\UsuariosController@scopeDelete');
+
+      $router->post('/usuarios/{id}/password', 'App\\Controllers\\UsuariosController@resetPassword');
+
+
+      $router->get('/empresas', 'App\\Controllers\\EmpresasController@index');
+      $router->get('/empresas/nuevo', 'App\\Controllers\\EmpresasController@nuevo');
+      $router->post('/empresas', 'App\\Controllers\\EmpresasController@crear');
+      $router->get('/empresas/{id}', 'App\\Controllers\\EmpresasController@edit');
+      $router->post('/empresas/{id}', 'App\\Controllers\\EmpresasController@update');
+
+
+      $router->get('/establecimientos', 'App\\Controllers\\EstablecimientosController@index');
+      $router->get('/establecimientos/nuevo', 'App\\Controllers\\EstablecimientosController@nuevo');
+      $router->post('/establecimientos', 'App\\Controllers\\EstablecimientosController@crear');
+
+      $router->get('/establecimientos/{id}', 'App\\Controllers\\EstablecimientosController@edit');
+      $router->post('/establecimientos/{id}', 'App\\Controllers\\EstablecimientosController@update');
     }
 
     // Panel raíz admin.tudominio.com (opcional)
     if (($request->tenant['mode'] ?? '') === 'panel_root') {
+      $router->get('/', 'App\\Controllers\\AuthController@form');
+
       $router->get('/login',  'App\\Controllers\\AuthController@form');
       $router->post('/login', 'App\\Controllers\\AuthController@login');
+
+      $router->post('/logout', 'App\\Controllers\\AuthController@logout');
+
+      $router->get('/empresas', 'App\\Controllers\\EmpresasController@index');
+      $router->get('/empresas/nuevo', 'App\\Controllers\\EmpresasController@nuevo');
+      $router->post('/empresas', 'App\\Controllers\\EmpresasController@crear');
+      $router->get('/empresas/{id}', 'App\\Controllers\\EmpresasController@edit');
+      $router->post('/empresas/{id}', 'App\\Controllers\\EmpresasController@update');
     }
     //$router->get('/__debug', 'App\\Controllers\\DebugController@index');
 

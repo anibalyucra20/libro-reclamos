@@ -49,11 +49,26 @@ final class PanelReclamosController extends Controller
     $estado = $this->request->input('estado', '');
     $params = ['eid' => $empresaId];
     $where = " WHERE r.empresa_id = :eid ";
+    $tipo  = $this->request->input('tipo', '');
+    $desde = $this->request->input('desde', date('Y-m-01'));
+    $hasta = $this->request->input('hasta', date('Y-m-d'));
+
 
     if (in_array($estado, ['REGISTRADO', 'EN_PROCESO', 'RESPONDIDO', 'CERRADO'], true)) {
       $where .= " AND r.estado = :estado ";
       $params['estado'] = $estado;
     }
+    if (in_array($tipo, ['RECLAMO', 'QUEJA'], true)) {
+      $where .= " AND r.tipo = :tipo ";
+      $params['tipo'] = $tipo;
+    }
+
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)$desde) && preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)$hasta)) {
+      $where .= " AND DATE(r.fecha_registro) BETWEEN :desde AND :hasta ";
+      $params['desde'] = $desde;
+      $params['hasta'] = $hasta;
+    }
+
 
     $sql = "SELECT r.id, r.codigo_reclamo, r.tipo, r.estado, r.fecha_registro, r.fecha_vencimiento_respuesta,
                    e.nombre AS establecimiento
@@ -71,6 +86,10 @@ final class PanelReclamosController extends Controller
       'tenant' => $this->request->tenant,
       'reclamos' => $reclamos,
       'estado' => $estado,
+      'tipo' => $tipo,
+      'desde' => $desde,
+      'hasta' => $hasta,
+
     ], 'panel');
   }
 
@@ -163,7 +182,7 @@ final class PanelReclamosController extends Controller
       ->execute(['rid' => $id, 'uid' => (int)$user['id']]);
 
     $pdo->commit();
-
-    $this->response->redirect("/reclamos/{$id}");
+    $panel = (string)($this->request->tenant['panel_prefix'] ?? '/panel');
+    $this->response->redirect(rtrim($panel, '/') . "/reclamos/{$id}");
   }
 }

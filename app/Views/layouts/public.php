@@ -7,10 +7,10 @@
   <title>Libro de Reclamaciones</title>
 
   <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets//bootstrap.min.css" rel="stylesheet">
 
   <!-- Iconos (opcional pero recomendado) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/assets//bootstrap-icons.min.css">
 
   <style>
     :root{
@@ -116,6 +116,6 @@
   </footer>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/bootstrap.bundle.min.js"></script>
 </body>
 </html>
