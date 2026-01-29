@@ -30,7 +30,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
 
       <div class="col-12 col-lg-6">
         <label class="form-label">Password (inicial)</label>
-        <input class="form-control" type="text" name="password" required>
+        <input class="form-control" type="text" name="password" placeholder="Nueva contraseña (min 8)" required minlength="8">
       </div>
 
       <div class="col-12 col-lg-6">

@@ -42,8 +42,8 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
           <div class="col-12">
             <label class="form-label">Estado</label>
             <select class="form-select" name="estado">
-              <option value="ACTIVO" <?= ($u['estado'] ?? '')==='ACTIVO'?'selected':'' ?>>ACTIVO</option>
-              <option value="INACTIVO" <?= ($u['estado'] ?? '')==='INACTIVO'?'selected':'' ?>>INACTIVO</option>
+              <option value="ACTIVO" <?= ($u['estado'] ?? '') === 'ACTIVO' ? 'selected' : '' ?>>ACTIVO</option>
+              <option value="INACTIVO" <?= ($u['estado'] ?? '') === 'INACTIVO' ? 'selected' : '' ?>>INACTIVO</option>
             </select>
           </div>
 
@@ -57,7 +57,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
         <div class="fw-bold mb-2">Reset password</div>
         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/password" class="d-flex gap-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
-          <input class="form-control" name="password" placeholder="Nuevo password (min 6)" required>
+          <input class="form-control" name="password" placeholder="Nuevo password (min 8)" required minlength="8">
           <button class="btn btn-outline-danger" type="submit"><i class="bi bi-key me-1"></i> Reset</button>
         </form>
 
@@ -82,18 +82,22 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             </thead>
             <tbody>
               <?php if (!$scopes): ?>
-                <tr><td colspan="4" class="text-body-secondary">Sin scopes.</td></tr>
+                <tr>
+                  <td colspan="4" class="text-body-secondary">Sin scopes.</td>
+                </tr>
               <?php else: ?>
                 <?php foreach ($scopes as $s): ?>
                   <tr>
                     <td><?= htmlspecialchars((string)$s['rol_nombre'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td><?= htmlspecialchars((string)($s['establecimiento_nombre'] ?? 'Nivel empresa'), ENT_QUOTES, 'UTF-8') ?></td>
-                    <td><span class="badge <?= $s['estado']==='ACTIVO'?'text-bg-success':'text-bg-secondary' ?>"><?= htmlspecialchars((string)$s['estado']) ?></span></td>
+                    <td><?= $estNombre = trim((string)($s['establecimiento_nombre'] ?? ''));
+                        echo htmlspecialchars($estNombre !== '' ? $estNombre : 'Nivel empresa', ENT_QUOTES, 'UTF-8');
+                        ?></td>
+                    <td><span class="badge <?= $s['estado'] === 'ACTIVO' ? 'text-bg-success' : 'text-bg-secondary' ?>"><?= htmlspecialchars((string)$s['estado']) ?></span></td>
                     <td class="text-end">
                       <?php if (($s['estado'] ?? '') === 'ACTIVO'): ?>
                         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/scope/<?= (int)$s['id'] ?>/delete" style="display:inline">
                           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
-                          <button class="btn btn-sm btn-outline-secondary" type="submit">
+                          <button class="btn btn-sm btn-outline-secondary" type="submit" onclick="return confirm('¿Cambiar la contraseña de este usuario?');">
                             <i class="bi bi-slash-circle me-1"></i> Desactivar
                           </button>
                         </form>
@@ -136,8 +140,21 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             </button>
           </div>
         </form>
-
       </div>
     </div>
   </div>
 </div>
+<script>
+  (function() {
+    const form = document.querySelector('form[action$="/scope"]');
+    if (!form) return;
+    const rol = form.querySelector('select[name="rol_id"]');
+    const btn = form.querySelector('button[type="submit"]');
+
+    function sync() {
+      btn.disabled = !rol.value;
+    }
+    rol.addEventListener('change', sync);
+    sync();
+  })();
+</script>

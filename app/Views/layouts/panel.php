@@ -16,12 +16,20 @@ $__canReportes = $__user && $__empresaId > 0
   ? ACL::can((int)$__user['id'], 'reclamos.reportes', $__empresaId, null)
   : false;
 $__canAlertas = $__user && $__empresaId > 0
-  ? ACL::can((int)$__user['id'], 'empresas.gestionar', $__empresaId, null)
+  ? ACL::can((int)$__user['id'], 'alertas.gestionar', $__empresaId, null)
   : false;
 
-$__canUsuarios = $__user && $__empresaId > 0
+$__canUsuariosEmpresa = $__user && $__empresaId > 0
   ? ACL::can((int)$__user['id'], 'usuarios.gestionar', $__empresaId, null)
   : false;
+
+$__canUsuariosGlobal = $__user
+  ? ACL::can((int)$__user['id'], 'usuarios.gestionar', null, null)
+  : false;
+
+// Si es panel_root, usa permiso global; si es panel empresa, usa el de empresa
+$__canUsuarios = (($tenant['mode'] ?? '') === 'panel_root') ? $__canUsuariosGlobal : $__canUsuariosEmpresa;
+
 
 $__canEstab = $__user && $__empresaId > 0
   ? ACL::can((int)$__user['id'], 'establecimientos.gestionar', $__empresaId, null)
@@ -196,9 +204,15 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
 
         <div class="ms-auto d-flex align-items-center gap-2">
           <!-- Acciones rápidas (opcional) -->
-          <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/reclamos">
-            <i class="bi bi-inbox me-1"></i> Reclamos
-          </a>
+          <?php if (($tenant['mode'] ?? '') === 'panel_root'): ?>
+            <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/empresas">
+              <i class="bi bi-buildings me-1"></i> Empresas
+            </a>
+          <?php else: ?>
+            <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/reclamos">
+              <i class="bi bi-inbox me-1"></i> Reclamos
+            </a>
+          <?php endif; ?>
           <?php if ($__user): ?>
             <form method="POST" action="<?= $__panelPrefix ?>/logout" class="d-inline">
               <input type="hidden" name="_csrf" value="<?= htmlspecialchars($__csrf, ENT_QUOTES, 'UTF-8') ?>">
@@ -224,10 +238,16 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
       </div>
       <div class="offcanvas-body">
         <div class="d-grid gap-2">
-          <a class="nav-pill <?= str_starts_with($__pathNorm, '/reclamos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/reclamos">
-            <i class="bi bi-inbox"></i> Reclamos
-          </a>
 
+          <?php if (($tenant['mode'] ?? '') === 'panel_root'): ?>
+            <a class="nav-pill <?= str_starts_with($__pathNorm, '/empresas') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/empresas">
+              <i class="bi bi-buildings"></i> Empresas
+            </a>
+          <?php else: ?>
+            <a class="nav-pill <?= str_starts_with($__pathNorm, '/reclamos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/reclamos">
+              <i class="bi bi-inbox"></i> Reclamos
+            </a>
+          <?php endif; ?>
           <!-- <?php if ($__canExport): ?>
             <a class="nav-pill <?= $__pathNorm === '/reclamos/exportar' ? 'active' : '' ?>"
               href="/reclamos/exportar?desde=<?= date('Y-m-01') ?>&hasta=<?= date('Y-m-d') ?>">
@@ -250,12 +270,6 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
               <i class="bi bi-people"></i> Usuarios
             </a>
           <?php endif; ?>
-          <?php if (($tenant['mode'] ?? '') === 'panel_root' && $__canEmpresasGlobal): ?>
-            <a class="nav-pill <?= str_starts_with($__pathNorm, '/empresas') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/empresas">
-              <i class="bi bi-buildings"></i> Empresas
-            </a>
-          <?php endif; ?>
-
           <?php if ($__canEstab): ?>
             <a class="nav-pill <?= str_starts_with($__pathNorm, '/establecimientos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/establecimientos">
               <i class="bi bi-geo"></i> Establecimientos
@@ -279,9 +293,15 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
           </div>
 
           <div class="d-grid gap-2">
-            <a class="nav-pill <?= str_starts_with($__pathNorm, '/reclamos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/reclamos">
-              <i class="bi bi-inbox"></i> Reclamos
-            </a>
+            <?php if (($tenant['mode'] ?? '') === 'panel_root'): ?>
+              <a class="nav-pill <?= str_starts_with($__pathNorm, '/empresas') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/empresas">
+                <i class="bi bi-buildings"></i> Empresas
+              </a>
+            <?php else: ?>
+              <a class="nav-pill <?= str_starts_with($__pathNorm, '/reclamos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/reclamos">
+                <i class="bi bi-inbox"></i> Reclamos
+              </a>
+            <?php endif; ?>
 
             <!-- <?php if ($__canExport): ?>
               <a class="nav-pill <?= $__pathNorm === '/reclamos/exportar' ? 'active' : '' ?>"
@@ -305,12 +325,6 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
                 <i class="bi bi-people"></i> Usuarios
               </a>
             <?php endif; ?>
-            <?php if (($tenant['mode'] ?? '') === 'panel_root' && $__canEmpresasGlobal): ?>
-              <a class="nav-pill <?= str_starts_with($__pathNorm, '/empresas') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/empresas">
-                <i class="bi bi-buildings"></i> Empresas
-              </a>
-            <?php endif; ?>
-
             <?php if ($__canEstab): ?>
               <a class="nav-pill <?= str_starts_with($__pathNorm, '/establecimientos') ? 'active' : '' ?>" href="<?= $__panelPrefix ?>/establecimientos">
                 <i class="bi bi-geo"></i> Establecimientos

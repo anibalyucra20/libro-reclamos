@@ -19,7 +19,7 @@ final class UsuariosController extends Controller
     if (($this->request->tenant['mode'] ?? '') !== 'panel') {
       http_response_code(400);
       echo "Panel inválido";
-      exit;
+      return;
     }
 
     $user = Auth::user();
@@ -28,13 +28,13 @@ final class UsuariosController extends Controller
     if (!$user || $empresaId <= 0) {
       http_response_code(403);
       echo "Forbidden";
-      exit;
+      return;
     }
 
     if (!ACL::can((int)$user['id'], $perm, $empresaId, null)) {
       http_response_code(403);
       echo "Sin permiso";
-      exit;
+      return;
     }
   }
 
@@ -71,6 +71,17 @@ final class UsuariosController extends Controller
   public function crear(): void
   {
     $this->guard('usuarios.gestionar');
+    if (!Csrf::check((string)$this->request->input('_csrf'))) {
+      http_response_code(419);
+      echo "CSRF inválido";
+      return;
+    }
+    $pwd = (string)$this->request->input('password');
+    if (mb_strlen($pwd) < 8) {
+      http_response_code(422);
+      echo "La contraseña debe tener al menos 8 caracteres";
+      return;
+    }
 
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $svc = new UsuariosService();
@@ -127,7 +138,11 @@ final class UsuariosController extends Controller
   public function update(): void
   {
     $this->guard('usuarios.gestionar');
-
+    if (!Csrf::check((string)$this->request->input('_csrf'))) {
+      http_response_code(419);
+      echo "CSRF inválido";
+      return;
+    }
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $id = (int)($this->request->params['id'] ?? 0);
 
@@ -154,10 +169,17 @@ final class UsuariosController extends Controller
 
   public function scopeAdd(): void
   {
-    $this->guard('usuarios.gestionar');
 
+
+    $this->guard('usuarios.gestionar');
+    if (!Csrf::check((string)$this->request->input('_csrf'))) {
+      http_response_code(419);
+      echo "CSRF inválido";
+      return;
+    }
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $id = (int)($this->request->params['id'] ?? 0);
+
 
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
@@ -168,6 +190,11 @@ final class UsuariosController extends Controller
     }
 
     $rolId = (int)$this->request->input('rol_id');
+    if ($rolId <= 0) {
+      http_response_code(422);
+      echo "Rol inválido";
+      return;
+    }
     $sidRaw = $this->request->input('establecimiento_id', '');
     $establecimientoId = ($sidRaw === '' ? null : (int)$sidRaw);
     $panel = $this->panelPrefix();
@@ -177,8 +204,14 @@ final class UsuariosController extends Controller
 
   public function scopeDelete(): void
   {
-    $this->guard('usuarios.gestionar');
 
+
+    $this->guard('usuarios.gestionar');
+    if (!Csrf::check((string)$this->request->input('_csrf'))) {
+      http_response_code(419);
+      echo "CSRF inválido";
+      return;
+    }
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $id = (int)($this->request->params['id'] ?? 0);
     $scopeId = (int)($this->request->params['scope_id'] ?? 0);
@@ -197,8 +230,14 @@ final class UsuariosController extends Controller
 
   public function resetPassword(): void
   {
-    $this->guard('usuarios.gestionar');
 
+
+    $this->guard('usuarios.gestionar');
+    if (!Csrf::check((string)$this->request->input('_csrf'))) {
+      http_response_code(419);
+      echo "CSRF inválido";
+      return;
+    }
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $id = (int)($this->request->params['id'] ?? 0);
 
@@ -209,6 +248,13 @@ final class UsuariosController extends Controller
       echo "No encontrado";
       return;
     }
+    $pwd = (string)$this->request->input('password');
+    if (mb_strlen($pwd) < 8) {
+      http_response_code(422);
+      echo "La contraseña debe tener al menos 8 caracteres";
+      return;
+    }
+
     $panel = $this->panelPrefix();
     try {
       $svc->resetPassword($id, (string)$this->request->input('password'));

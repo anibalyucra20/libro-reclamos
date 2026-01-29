@@ -103,6 +103,12 @@ final class App
       $router->post('/empresas', 'App\\Controllers\\EmpresasController@crear');
       $router->get('/empresas/{id}', 'App\\Controllers\\EmpresasController@edit');
       $router->post('/empresas/{id}', 'App\\Controllers\\EmpresasController@update');
+
+      $router->get('/usuarios', 'App\\Controllers\\UsuariosRootController@index');
+      $router->get('/usuarios/nuevo', 'App\\Controllers\\UsuariosRootController@nuevo');
+      $router->post('/usuarios', 'App\\Controllers\\UsuariosRootController@crear');
+      $router->get('/usuarios/{id}', 'App\\Controllers\\UsuariosRootController@show');
+      $router->post('/usuarios/{id}/password', 'App\\Controllers\\UsuariosRootController@resetPassword');
     }
     //$router->get('/__debug', 'App\\Controllers\\DebugController@index');
 
