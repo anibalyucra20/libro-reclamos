@@ -92,7 +92,7 @@ final class TenantMiddleware
         $request->tenant = ['mode' => 'panel_root', 'panel_prefix' => $panelPrefix, 'mount' => $panelPrefix];
         return;
       }
-      $request->tenant = ['mode' => 'marketing', 'panel_prefix' => $panelPrefix, 'mount' => ''];
+      $request->tenant = ['mode' => 'landing', 'panel_prefix' => $panelPrefix, 'mount' => ''];
       return;
     }
 

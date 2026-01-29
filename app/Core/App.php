@@ -23,9 +23,12 @@ final class App
     (new TenantMiddleware())->handle($request); // resuelve tenant por subdominio
     (new CsrfMiddleware())->handle($request);   // valida CSRF en métodos mutadores
     // Landing principal (websigi.com)
-    if (($request->tenant['mode'] ?? '') === 'marketing') {
-      $router->get('/', 'App\\Controllers\\MarketingController@home');
+    if (($request->tenant['mode'] ?? '') === 'landing') {
+      $router->get('/', 'App\\Controllers\\LandingController@index');
+      $router->get('/pricing', 'App\\Controllers\\LandingController@pricing'); // opcional
+      $router->get('/contacto', 'App\\Controllers\\LandingController@contacto'); // opcional
     }
+
     // Rutas públicas (empresa.tudominio.com)
     if (($request->tenant['mode'] ?? '') === 'public') {
       $router->get('/', 'App\\Controllers\\PublicLibroController@home');
