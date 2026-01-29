@@ -9,7 +9,7 @@ use App\Services\Csrf;
 use App\Services\RateLimiter;
 use App\Models\Usuario;
 
-final class AuthController extends Controller
+final class MarketingController extends Controller
 {
   public function home(): void
   {
