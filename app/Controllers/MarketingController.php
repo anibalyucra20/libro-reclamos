@@ -13,7 +13,7 @@ final class MarketingController extends Controller
 {
   public function home(): void
   {
-    $this->view('panel_root.index', [
+    $this->view('index', [
       'csrf' => Csrf::token(),
       'tenant' => $this->request->tenant,
     ], 'panel');
