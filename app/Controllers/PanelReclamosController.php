@@ -414,4 +414,113 @@ final class PanelReclamosController extends Controller
     $panel = (string)($this->request->tenant['panel_prefix'] ?? '/panel');
     $this->response->redirect(rtrim($panel, '/') . "/reclamos/{$id}");
   }
+
+  public function descargarEvidencia(): void
+  {
+    $this->guard('reclamos.ver');
+
+    $empresaId = (int)$this->request->tenant['empresa_id'];
+    $id = (int)($this->request->params['id'] ?? 0);
+
+    if ($id <= 0) {
+      http_response_code(400);
+      echo "ID inválido";
+      return;
+    }
+
+    // Traer evidencia solo si pertenece a la empresa (multi-tenant)
+    $sql = "SELECT id, codigo_reclamo, evidencia_path, evidencia_original, evidencia_mime, evidencia_size
+          FROM reclamos
+          WHERE empresa_id = :eid AND id = :id
+          LIMIT 1";
+    $st = DB::pdo()->prepare($sql);
+    $st->execute(['eid' => $empresaId, 'id' => $id]);
+    $r = $st->fetch();
+
+    if (!$r) {
+      http_response_code(404);
+      echo "No encontrado";
+      return;
+    }
+
+    $path = (string)($r['evidencia_path'] ?? '');
+    if ($path === '') {
+      http_response_code(404);
+      echo "Este reclamo no tiene evidencia adjunta";
+      return;
+    }
+
+    // ========= BASE DIR: storage/evidencias =========
+    // Tu BD guarda: storage/evidencias/<empresaId>/<archivo>
+    $baseDir = rtrim((string)($_ENV['EVIDENCIAS_DIR'] ?? (dirname(__DIR__, 2) . '/storage/evidencias')), "/\\");
+    $baseReal = realpath($baseDir);
+    if ($baseReal === false || !is_dir($baseReal)) {
+      http_response_code(500);
+      echo "Directorio de evidencias no existe";
+      return;
+    }
+
+    // Normaliza
+    $pathNorm = str_replace('\\', '/', $path);
+
+    // Recorta prefijos conocidos (porque en BD guardas "storage/evidencias/...")
+    $pathNorm = preg_replace('~^(?:\./)?storage/evidencias/~', '', $pathNorm);
+    $pathNorm = preg_replace('~^(?:\./)?evidencias/~', '', $pathNorm);
+    $pathNorm = ltrim((string)$pathNorm, '/');
+
+    // Si por alguna razón quedó vacío
+    if ($pathNorm === '') {
+      http_response_code(404);
+      echo "Archivo no encontrado";
+      return;
+    }
+
+    // Unir ruta final
+    $candidate = $baseReal . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $pathNorm);
+
+    $real = realpath($candidate);
+    if ($real === false || !is_file($real)) {
+      http_response_code(404);
+      echo "Archivo no encontrado";
+      return;
+    }
+
+    // Seguridad: que esté dentro del baseDir
+    $realNorm = rtrim(str_replace('\\', '/', $real), '/');
+    $baseNorm = rtrim(str_replace('\\', '/', $baseReal), '/');
+    if (!str_starts_with($realNorm, $baseNorm . '/')) {
+      http_response_code(403);
+      echo "Acceso denegado";
+      return;
+    }
+
+    $mime = (string)($r['evidencia_mime'] ?? '');
+    if ($mime === '') {
+      $mime = function_exists('mime_content_type')
+        ? (mime_content_type($real) ?: 'application/octet-stream')
+        : 'application/octet-stream';
+    }
+
+    $orig = (string)($r['evidencia_original'] ?? '');
+    $fallbackName = 'evidencia_' .
+      preg_replace('/[^A-Za-z0-9\-]/', '_', (string)($r['codigo_reclamo'] ?? 'reclamo')) .
+      '_' . basename($real);
+
+    $downloadName = $orig !== '' ? $orig : $fallbackName;
+
+    // Headers de descarga
+    header('Content-Description: File Transfer');
+    header('Content-Type: ' . $mime);
+    header('Content-Disposition: attachment; filename="' . addslashes($downloadName) . '"');
+    header('Content-Length: ' . (string)filesize($real));
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+
+    while (ob_get_level()) {
+      ob_end_clean();
+    }
+
+    readfile($real);
+    exit;
+  }
 }

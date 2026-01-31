@@ -78,12 +78,22 @@ $eviSizePretty = '—';
 if (is_numeric($eviSize)) {
   $bytes = (float)$eviSize;
   if ($bytes < 1024) $eviSizePretty = (string)$bytes . ' B';
-  elseif ($bytes < 1024*1024) $eviSizePretty = number_format($bytes/1024, 1) . ' KB';
-  else $eviSizePretty = number_format($bytes/(1024*1024), 2) . ' MB';
+  elseif ($bytes < 1024 * 1024) $eviSizePretty = number_format($bytes / 1024, 1) . ' KB';
+  else $eviSizePretty = number_format($bytes / (1024 * 1024), 2) . ' MB';
   $eviSizePretty = htmlspecialchars($eviSizePretty, ENT_QUOTES, 'UTF-8');
 }
 
 $labelPersona = ($consTipo === 'JURIDICA') ? 'Razón social' : 'Consumidor';
+
+
+$hasEvidencia = !empty($reclamo['evidencia_path']);
+$evidenciaNombre = htmlspecialchars((string)($reclamo['evidencia_original'] ?? 'archivo'), ENT_QUOTES, 'UTF-8');
+$evidenciaSize = (int)($reclamo['evidencia_size'] ?? 0);
+
+$evidenciaSizeKb = $evidenciaSize > 0
+  ? number_format($evidenciaSize / 1024, 1) . ' KB'
+  : '';
+
 ?>
 
 <!-- Header -->
@@ -275,6 +285,18 @@ $labelPersona = ($consTipo === 'JURIDICA') ? 'Razón social' : 'Consumidor';
               <div class="fw-semibold"><?= $eviUpAt !== '' ? $eviUpAt : '—' ?></div>
             </div>
             <!-- Si tienes endpoint de descarga/preview, lo conectas aquí -->
+            <?php if ($hasEvidencia): ?>
+              <a
+                class="btn btn-outline-primary"
+                href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>/evidencia"
+                target="_blank">
+                <i class="bi bi-paperclip me-1"></i>
+                Descargar evidencia
+                <?php if ($evidenciaSizeKb): ?>
+                  <small class="opacity-75">(<?= $evidenciaSizeKb ?>)</small>
+                <?php endif; ?>
+              </a>
+            <?php endif; ?>
           </div>
         <?php endif; ?>
 

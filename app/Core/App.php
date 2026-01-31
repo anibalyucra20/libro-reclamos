@@ -59,7 +59,7 @@ final class App
       $router->get('/reclamos/{id}/pdf', 'App\\Controllers\\PanelReclamosController@pdfOficial');
       $router->get('/reclamos/{id}',         'App\\Controllers\\PanelReclamosController@show');
       $router->post('/reclamos/{id}/responder', 'App\\Controllers\\PanelReclamosController@responder');
-
+      $router->get('/reclamos/{id}/evidencia', 'App\\Controllers\\PanelReclamosController@descargarEvidencia');
 
 
       $router->get('/alertas', 'App\\Controllers\\AlertasController@index');
