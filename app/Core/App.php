@@ -95,7 +95,7 @@ final class App
 
     // Panel raíz admin.tudominio.com (opcional)
     if (($request->tenant['mode'] ?? '') === 'panel_root') {
-      $router->get('/', 'App\\Controllers\\AuthController@form');
+      $router->get('/', 'App\\Controllers\\EmpresasController@index');
 
       $router->get('/login',  'App\\Controllers\\AuthController@form');
       $router->post('/login', 'App\\Controllers\\AuthController@login');
