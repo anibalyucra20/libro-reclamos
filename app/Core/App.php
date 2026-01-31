@@ -38,7 +38,7 @@ final class App
       $router->get('/seguimiento/{token}', 'App\\Controllers\\PublicLibroController@seguimiento');
       $router->get('/seguimiento', 'App\\Controllers\\PublicLibroController@seguimientoForm');
       $router->post('/seguimiento/buscar', 'App\\Controllers\\PublicLibroController@seguimientoBuscar');
-      $router->get('/constancia/{token}/pdf', 'App\\Controllers\\PublicLibroController@constanciaPdf');
+      $router->get('/constancia/{token}/pdf', 'App\\Controllers\\PublicLibroController@hojaOficialPdf');
     }
 
     // Rutas panel por empresa (empresa.admin.tudominio.com)
@@ -56,8 +56,11 @@ final class App
       $router->get('/',              'App\\Controllers\\PanelReclamosController@index');
       $router->get('/reclamos',              'App\\Controllers\\PanelReclamosController@index');
       $router->get('/reclamos/exportar', 'App\\Controllers\\ExportReclamosController@xlsx');
+      $router->get('/reclamos/{id}/pdf', 'App\\Controllers\\PanelReclamosController@pdfOficial');
       $router->get('/reclamos/{id}',         'App\\Controllers\\PanelReclamosController@show');
       $router->post('/reclamos/{id}/responder', 'App\\Controllers\\PanelReclamosController@responder');
+
+
 
       $router->get('/alertas', 'App\\Controllers\\AlertasController@index');
       $router->post('/alertas', 'App\\Controllers\\AlertasController@save');

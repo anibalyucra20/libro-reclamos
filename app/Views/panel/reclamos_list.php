@@ -110,6 +110,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
         <thead class="table-light">
           <tr>
             <th class="ps-3">Código</th>
+            <th>Consumidor</th>
             <th>Tipo</th>
             <th>Estado</th>
             <th>Establecimiento</th>
@@ -138,7 +139,15 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
                 <td class="ps-3 fw-semibold">
                   <?= htmlspecialchars((string)$r['codigo_reclamo']) ?>
                 </td>
-
+                <td><?php
+                    $consTipo = strtoupper((string)($r['consumidor_tipo'] ?? 'NATURAL'));
+                    $nombre = trim((string)$r['consumidor_nombres']);
+                    if ($consTipo !== 'JURIDICA') {
+                      $nombre = trim($nombre . ' ' . trim((string)($r['consumidor_apellidos'] ?? '')));
+                    }
+                    ?>
+                  <?= htmlspecialchars($nombre) ?>
+                </td>
                 <td>
                   <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis">
                     <?= htmlspecialchars((string)$r['tipo']) ?>
@@ -165,7 +174,10 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
 
                 <td class="text-end pe-3">
                   <a class="btn btn-sm btn-outline-primary" href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>">
-                    <i class="bi bi-eye me-1"></i> Ver
+                    <i class="bi bi-eye me-1"></i>
+                  </a>
+                  <a class="btn btn-sm btn-outline-danger" href="<?= $__panelPrefix ?>/reclamos/<?= (int)$id ?>/pdf">
+                    <i class="bi bi-file-earmark-pdf"></i>
                   </a>
                 </td>
               </tr>
