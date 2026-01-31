@@ -22,12 +22,12 @@ final class SecurityHeadersMiddleware
     $panelPath = '/panel';
     $isPanel = ($uriPath === $panelPath) || str_starts_with($uriPath, $panelPath . '/');
 
-    $csp = "default-src 'self'; "
+    /*$csp = "default-src 'self'; "
       . "img-src 'self' data: https:; "
       . "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
       . "font-src 'self' https://cdn.jsdelivr.net data:; "
       . "script-src 'self' https://cdn.jsdelivr.net" . ($isPanel ? " 'unsafe-inline'" : "") . ";";
 
-    header("Content-Security-Policy: " . $csp);
+    header("Content-Security-Policy: " . $csp);*/
   }
 }

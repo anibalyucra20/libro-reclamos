@@ -53,6 +53,7 @@ final class App
 
       // Requiere auth
       // (lo aplicamos dentro del controller por ahora; en Parte 5 lo hacemos middleware por grupo)
+      $router->get('/',              'App\\Controllers\\PanelReclamosController@index');
       $router->get('/reclamos',              'App\\Controllers\\PanelReclamosController@index');
       $router->get('/reclamos/exportar', 'App\\Controllers\\ExportReclamosController@xlsx');
       $router->get('/reclamos/{id}',         'App\\Controllers\\PanelReclamosController@show');
