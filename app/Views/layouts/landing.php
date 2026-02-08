@@ -3,151 +3,207 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Libro de Reclamaciones | Cumple, atiende y convierte</title>
-  <meta name="description" content="Landing page para Libro de Reclamaciones: digital, fácil, rápido y alineado a tu atención al cliente. Incluye formulario, FAQ, testimonios y CTA." />
+  <title>Libro de Reclamaciones | Atención profesional</title>
+  <meta name="description" content="Landing profesional para Libro de Reclamaciones: formulario, seguimiento, reportes, FAQ y CTA." />
 
   <style>
     :root{
-      --bg:#070A12;
-      --card:#0E1326cc;
-      --card2:#0B1022cc;
+      --bg0:#05070F;
+      --bg1:#070A14;
+      --card:#0C1224cc;
+      --card2:#0A1021cc;
       --text:#EAF0FF;
-      --muted:#A9B4D6;
-      --line:#23305F;
-      --brand1:#7C3AED;
-      --brand2:#22D3EE;
-      --brand3:#F472B6;
+      --muted:#A7B2D6;
+      --line:#22305C;
+
+      --brand1:#6D28D9; /* morado */
+      --brand2:#06B6D4; /* cian */
+      --brand3:#F472B6; /* rosa */
+
       --ok:#34D399;
-      --warn:#FBBF24;
-      --shadow: 0 25px 60px rgba(0,0,0,.55);
-      --radius: 20px;
-      --radius2: 28px;
+      --shadow: 0 26px 70px rgba(0,0,0,.55);
+      --radius: 18px;
+      --radius2: 26px;
       --max: 1120px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
       background:
-        radial-gradient(1200px 700px at 15% 12%, rgba(124,58,237,.35), transparent 55%),
-        radial-gradient(900px 650px at 85% 20%, rgba(34,211,238,.25), transparent 55%),
-        radial-gradient(900px 700px at 40% 90%, rgba(244,114,182,.18), transparent 55%),
-        linear-gradient(180deg, #050614 0%, #070A12 40%, #050614 100%);
+        radial-gradient(1100px 680px at 16% 12%, rgba(109,40,217,.26), transparent 56%),
+        radial-gradient(900px 620px at 86% 16%, rgba(6,182,212,.20), transparent 56%),
+        radial-gradient(800px 620px at 50% 92%, rgba(244,114,182,.12), transparent 56%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 45%, var(--bg0) 100%);
       overflow-x:hidden;
     }
 
     a{color:inherit; text-decoration:none}
     .wrap{width: min(var(--max), calc(100% - 48px)); margin:0 auto}
-    .top{
-      position:sticky; top:0; z-index:50;
-      background: linear-gradient(180deg, rgba(5,6,20,.85), rgba(5,6,20,.55));
+
+    /* NAV (sticky + compact on scroll) */
+    header.top{
+      position: sticky; top: 0; z-index: 80;
+      background: rgba(5,7,15,.55);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(35,48,95,.35);
+      border-bottom: 1px solid rgba(34,48,92,.45);
     }
     .nav{
       display:flex; align-items:center; justify-content:space-between;
-      padding: 14px 0;
       gap:16px;
+      padding: 16px 0;
+      transition: padding .18s ease;
     }
+    body.scrolled .nav{padding: 10px 0;}
+
     .brand{
       display:flex; align-items:center; gap:12px;
-      font-weight:800; letter-spacing:.2px;
+      font-weight:900; letter-spacing:.2px;
+      min-width: 220px;
     }
     .logo{
       width:40px; height:40px; border-radius:14px;
       background: conic-gradient(from 180deg, var(--brand2), var(--brand1), var(--brand3), var(--brand2));
-      box-shadow: 0 10px 25px rgba(124,58,237,.25), 0 10px 25px rgba(34,211,238,.15);
+      box-shadow: 0 14px 34px rgba(109,40,217,.25), 0 14px 34px rgba(6,182,212,.15);
       position:relative;
       overflow:hidden;
+      flex: 0 0 auto;
     }
     .logo::after{
       content:"";
-      position:absolute; inset:-40%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+      position:absolute; inset:-55%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
       transform: rotate(25deg);
-      animation: sheen 3.2s ease-in-out infinite;
+      animation: sheen 3.6s ease-in-out infinite;
     }
-    @keyframes sheen{ 0%, 70%{translate:-50% 0} 100%{translate:50% 0} }
+    @keyframes sheen{ 0%, 72%{translate:-52% 0} 100%{translate:52% 0} }
 
-    .navlinks{display:flex; align-items:center; gap:18px; color:var(--muted); font-weight:600; font-size:14px}
-    .navlinks a{padding:10px 10px; border-radius:12px}
-    .navlinks a:hover{background: rgba(255,255,255,.06); color: var(--text)}
-    .actions{display:flex; gap:10px; align-items:center}
+    .brand small{display:block; color:var(--muted); font-weight:800; margin-top:2px}
+
+    .navlinks{
+      display:flex; align-items:center; gap:8px;
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    .navlinks a{
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: rgba(234,240,255,.88);
+      font-weight: 800;
+      font-size: 13px;
+      transition: background .15s ease, color .15s ease, transform .15s ease;
+      white-space: nowrap;
+    }
+    .navlinks a:hover{background: rgba(255,255,255,.07); transform: translateY(-1px)}
+    .navlinks a.active{
+      background: linear-gradient(90deg, rgba(6,182,212,.22), rgba(109,40,217,.18));
+      border: 1px solid rgba(6,182,212,.20);
+    }
+
+    .actions{display:flex; gap:10px; align-items:center; justify-content:flex-end; min-width: 260px;}
     .btn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       color: var(--text);
       padding: 10px 14px;
       border-radius: 14px;
-      font-weight:700;
-      font-size:14px;
+      font-weight: 850;
+      font-size: 13px;
       cursor:pointer;
-      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
       display:inline-flex; align-items:center; gap:10px;
       user-select:none;
     }
-    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.20)}
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22)}
     .btn.primary{
       border:none;
       background: linear-gradient(90deg, var(--brand1), var(--brand2));
-      box-shadow: 0 18px 40px rgba(124,58,237,.28), 0 18px 40px rgba(34,211,238,.18);
+      box-shadow: 0 18px 46px rgba(109,40,217,.25), 0 18px 46px rgba(6,182,212,.16);
     }
-    .btn.primary:hover{transform: translateY(-2px) scale(1.01)}
-    .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 8px 12px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      border-radius: 999px;
-      color: var(--muted);
-      font-weight:700;
-      font-size:13px;
+    .btn.primary:hover{transform: translateY(-2px)}
+    .icon{
+      width:18px; height:18px; display:inline-block; border-radius:7px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      position:relative;
     }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.15) 35%, transparent 65%),
-                  linear-gradient(180deg, var(--ok), #16A34A);
-      box-shadow: 0 0 0 6px rgba(52,211,153,.10);
+    .icon::after{
+      content:"";
+      position:absolute; inset:4px;
+      border-radius:5px;
+      background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.05));
     }
 
     /* HERO */
-    .hero{
-      padding: 42px 0 18px;
-      position:relative;
-    }
-    .grid{
+    main.hero{padding: 42px 0 16px; position:relative;}
+    .heroGrid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 28px;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 26px;
       align-items: stretch;
     }
-    .h1{
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight:850;
+      font-size: 13px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(180deg, var(--ok), #16A34A);
+      box-shadow: 0 0 0 6px rgba(52,211,153,.10);
+    }
+    h1{
       font-size: clamp(34px, 4.2vw, 56px);
       line-height: 1.02;
       margin: 14px 0 10px;
-      letter-spacing: -0.6px;
-    }
-    .lead{
-      color: var(--muted);
-      font-size: clamp(16px, 1.6vw, 18px);
-      line-height: 1.55;
-      margin: 0 0 18px;
-      max-width: 62ch;
+      letter-spacing: -0.7px;
     }
     .grad{
-      background: linear-gradient(90deg, #ffffff, rgba(255,255,255,.85), rgba(255,255,255,.55));
+      background: linear-gradient(90deg, #ffffff, rgba(255,255,255,.78));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
     }
     .glow{
-      background: linear-gradient(90deg, var(--brand2), var(--brand1), var(--brand3));
+      background: linear-gradient(90deg, var(--brand2), var(--brand1));
       -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow: 0 0 32px rgba(124,58,237,.25);
+      text-shadow: 0 0 36px rgba(109,40,217,.22);
     }
+    .lead{
+      color: var(--muted);
+      font-size: clamp(16px, 1.6vw, 18px);
+      line-height: 1.6;
+      margin: 0 0 18px;
+      max-width: 62ch;
+      font-weight: 650;
+    }
+    .heroCTAs{display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 12px}
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      color: var(--muted); font-weight: 750; font-size: 13px;
+    }
+    .meta .tag{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(52,211,153,.08);
+      border: 1px solid rgba(52,211,153,.16);
+      color:#CFFBEA;
+    }
+
+    /* Demo Card */
     .heroCard{
       border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -156,127 +212,89 @@
       padding: 18px;
       position:relative;
       overflow:hidden;
-      min-height: 430px;
     }
     .heroCard::before{
       content:"";
       position:absolute; inset:-1px;
       background:
-        radial-gradient(600px 240px at 20% 0%, rgba(34,211,238,.22), transparent 55%),
-        radial-gradient(480px 260px at 90% 0%, rgba(124,58,237,.25), transparent 60%),
-        radial-gradient(480px 380px at 60% 100%, rgba(244,114,182,.18), transparent 60%);
+        radial-gradient(620px 260px at 22% 0%, rgba(6,182,212,.14), transparent 60%),
+        radial-gradient(520px 260px at 85% 0%, rgba(109,40,217,.18), transparent 60%),
+        radial-gradient(520px 380px at 60% 110%, rgba(244,114,182,.10), transparent 65%);
       pointer-events:none;
     }
     .miniHeader{
       position:relative;
       display:flex; align-items:center; justify-content:space-between;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(10,14,30,.55);
-      color: var(--muted);
-      font-weight:700;
+      color: rgba(234,240,255,.82);
+      font-weight:850;
       font-size: 13px;
       margin-bottom: 14px;
     }
     .badge{
       padding:6px 10px; border-radius:999px;
-      background: rgba(34,211,238,.12);
-      border: 1px solid rgba(34,211,238,.25);
+      background: rgba(6,182,212,.10);
+      border: 1px solid rgba(6,182,212,.22);
       color: #BFF7FF;
-      font-weight:800;
+      font-weight: 900;
       font-size: 12px;
+      letter-spacing:.08em;
     }
-
-    .mock{
-      position:relative;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
+    .mock{position:relative; display:grid; gap:12px}
     .tile{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(9,12,26,.55);
-      border-radius: var(--radius);
+      border-radius: var(--radius2);
       padding: 14px;
       position:relative;
       overflow:hidden;
     }
     .tile h3{margin:0 0 6px; font-size:14px; letter-spacing:.2px}
-    .tile p{margin:0; color:var(--muted); font-size:13px; line-height:1.45}
-    .row{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      color: var(--muted); font-weight:700; font-size:12px;
-      margin-top:10px;
-    }
+    .tile p{margin:0; color:var(--muted); font-size:13px; line-height:1.5; font-weight:650}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:12px; color: var(--muted); font-weight:800; font-size:12px; margin-top:10px}
     .bar{
       height: 10px; border-radius: 999px;
       background: rgba(255,255,255,.08);
       overflow:hidden; border: 1px solid rgba(255,255,255,.10);
+      margin-top: 8px;
     }
     .bar > span{
       display:block; height:100%;
       width: 72%;
       background: linear-gradient(90deg, var(--brand2), var(--brand1));
-      filter: saturate(1.15);
     }
 
-    .heroCTAs{display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 10px}
-    .heroMeta{display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-top: 10px; color: var(--muted); font-weight:700; font-size:13px}
-    .check{
-      display:inline-flex; gap:10px; align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(52,211,153,.10);
-      border: 1px solid rgba(52,211,153,.20);
-      color:#CFFBEA;
-    }
-    .icon{
-      width:18px; height:18px; display:inline-block; border-radius:6px;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-      position:relative;
-    }
-    .icon::after{
-      content:"";
-      position:absolute; inset:4px;
-      border-radius:4px;
-      background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.05));
-    }
-
-    /* SECTION */
-    section{padding: 44px 0}
+    /* Sections */
+    section{padding: 46px 0}
     .sectionHead{
       display:flex; align-items:flex-end; justify-content:space-between; gap:18px;
       margin-bottom: 18px;
     }
     .kicker{
       color: var(--muted);
-      font-weight:800;
-      letter-spacing:.16em;
+      font-weight: 900;
+      letter-spacing:.18em;
       text-transform: uppercase;
       font-size: 12px;
     }
-    .h2{
+    h2{
       margin:6px 0 0;
       font-size: clamp(22px, 2.5vw, 34px);
-      letter-spacing: -.4px;
+      letter-spacing: -.45px;
       line-height:1.15;
     }
     .sub{
       margin:0;
       color: var(--muted);
       max-width: 60ch;
-      line-height:1.55;
-      font-weight:600;
+      line-height:1.6;
+      font-weight:650;
     }
 
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
+    .cards{display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px}
     .card{
       grid-column: span 4;
       border: 1px solid rgba(255,255,255,.12);
@@ -292,12 +310,10 @@
       content:"";
       position:absolute; inset:-1px;
       background:
-        radial-gradient(450px 220px at 20% 0%, rgba(34,211,238,.14), transparent 60%),
-        radial-gradient(420px 240px at 85% 0%, rgba(124,58,237,.16), transparent 60%);
+        radial-gradient(450px 220px at 20% 0%, rgba(6,182,212,.10), transparent 60%),
+        radial-gradient(420px 240px at 85% 0%, rgba(109,40,217,.12), transparent 60%);
       pointer-events:none;
     }
-    .card h3{position:relative; margin:0 0 8px; font-size:16px}
-    .card p{position:relative; margin:0; color:var(--muted); line-height:1.55; font-weight:600}
     .chip{
       position:relative;
       display:inline-flex; align-items:center; gap:10px;
@@ -307,22 +323,22 @@
       border:1px solid rgba(255,255,255,.10);
       margin-bottom: 12px;
       color: var(--muted);
-      font-weight:800;
+      font-weight:900;
       font-size:12px;
       width: fit-content;
+      letter-spacing:.06em;
+      text-transform: uppercase;
     }
-    .chip .spark{
+    .spark{
       width:10px; height:10px; border-radius:999px;
-      background: linear-gradient(180deg, var(--brand3), var(--brand1));
-      box-shadow: 0 0 0 6px rgba(244,114,182,.10);
+      background: linear-gradient(180deg, var(--brand2), var(--brand1));
+      box-shadow: 0 0 0 6px rgba(6,182,212,.08);
     }
+    .card h3{position:relative; margin:0 0 8px; font-size:16px; letter-spacing:.1px}
+    .card p{position:relative; margin:0; color:var(--muted); line-height:1.6; font-weight:650}
 
-    /* HOW */
-    .steps{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
+    /* How */
+    .steps{display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px}
     .step{
       grid-column: span 3;
       border: 1px solid rgba(255,255,255,.12);
@@ -330,25 +346,21 @@
       border-radius: var(--radius2);
       padding: 18px;
       position:relative;
-      overflow:hidden;
       min-height: 170px;
     }
     .num{
       width:42px; height:42px; border-radius: 16px;
       display:grid; place-items:center;
-      font-weight:900;
-      background: linear-gradient(90deg, rgba(34,211,238,.22), rgba(124,58,237,.22));
+      font-weight: 950;
+      background: linear-gradient(90deg, rgba(6,182,212,.18), rgba(109,40,217,.18));
       border:1px solid rgba(255,255,255,.14);
       margin-bottom: 12px;
     }
-    .step h3{margin: 0 0 8px}
-    .step p{margin:0; color:var(--muted); line-height:1.55; font-weight:600}
+    .step h3{margin:0 0 8px}
+    .step p{margin:0; color:var(--muted); line-height:1.6; font-weight:650}
 
-    /* PRICING */
-    .pricing{
-      display:grid; grid-template-columns: repeat(12,1fr); gap: 14px;
-      align-items: stretch;
-    }
+    /* Pricing */
+    .pricing{display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px}
     .price{
       grid-column: span 4;
       border: 1px solid rgba(255,255,255,.12);
@@ -360,25 +372,25 @@
       overflow:hidden;
     }
     .price.featured{
-      border-color: rgba(34,211,238,.35);
-      box-shadow: 0 28px 70px rgba(34,211,238,.12), 0 28px 70px rgba(124,58,237,.12);
+      border-color: rgba(6,182,212,.30);
+      box-shadow: 0 28px 70px rgba(6,182,212,.10), 0 28px 70px rgba(109,40,217,.10);
       transform: translateY(-4px);
     }
-    .price h3{margin:0 0 6px}
-    .price .tag{color:var(--muted); font-weight:800; font-size:12px; letter-spacing:.14em; text-transform:uppercase}
-    .money{
-      font-size: 38px; font-weight: 900; letter-spacing:-.8px; margin: 10px 0 2px;
+    .tag{
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing:.18em;
+      text-transform: uppercase;
     }
-    .per{color:var(--muted); font-weight:700; margin:0 0 12px}
+    .money{font-size: 40px; font-weight: 950; letter-spacing:-.9px; margin: 10px 0 2px}
+    .per{color:var(--muted); font-weight:750; margin:0 0 12px}
     .list{margin: 0 0 14px; padding: 0; list-style:none; display:grid; gap:8px}
-    .list li{
-      display:flex; gap:10px; align-items:flex-start;
-      color: var(--muted); font-weight:650; line-height:1.4;
-    }
+    .list li{display:flex; gap:10px; align-items:flex-start; color: var(--muted); font-weight:700; line-height:1.45}
     .tick{
       width:18px; height:18px; border-radius:6px;
-      background: rgba(52,211,153,.16);
-      border:1px solid rgba(52,211,153,.28);
+      background: rgba(52,211,153,.14);
+      border:1px solid rgba(52,211,153,.24);
       position:relative; flex:0 0 auto; margin-top:1px;
     }
     .tick::after{
@@ -391,7 +403,7 @@
       transform: rotate(35deg);
     }
 
-    /* TESTIMONIALS */
+    /* Testimonials */
     .testis{display:grid; grid-template-columns: repeat(12,1fr); gap:14px}
     .quote{
       grid-column: span 4;
@@ -399,10 +411,9 @@
       background: rgba(9,12,26,.55);
       border-radius: var(--radius2);
       padding: 18px;
-      position:relative;
     }
-    .quote p{margin:0 0 12px; color: var(--text); font-weight:650; line-height:1.55}
-    .who{display:flex; gap:12px; align-items:center; color: var(--muted); font-weight:800}
+    .quote p{margin:0 0 12px; color: rgba(234,240,255,.95); font-weight:700; line-height:1.6}
+    .who{display:flex; gap:12px; align-items:center; color: var(--muted); font-weight:900}
     .ava{
       width:44px; height:44px; border-radius: 18px;
       background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
@@ -417,10 +428,8 @@
       border-radius: var(--radius2);
       overflow:hidden;
     }
-    .qa{
-      border-top: 1px solid rgba(35,48,95,.55);
-    }
-    .qa:first-child{border-top: none}
+    .qa{border-top: 1px solid rgba(34,48,92,.55)}
+    .qa:first-child{border-top:none}
     .q{
       width:100%;
       text-align:left;
@@ -428,27 +437,17 @@
       border: none;
       color: var(--text);
       padding: 16px 18px;
-      font-weight:850;
+      font-weight: 950;
       font-size: 15px;
       display:flex; justify-content:space-between; gap:14px; align-items:center;
       cursor:pointer;
     }
-    .q span{color: var(--muted); font-weight:900}
-    .a{
-      max-height: 0;
-      overflow:hidden;
-      transition: max-height .25s ease;
-    }
-    .a p{
-      margin:0;
-      padding: 0 18px 16px;
-      color: var(--muted);
-      line-height:1.6;
-      font-weight:650;
-    }
+    .q span{color: var(--muted); font-weight: 950}
+    .a{max-height: 0; overflow:hidden; transition: max-height .22s ease}
+    .a p{margin:0; padding: 0 18px 16px; color: var(--muted); line-height:1.65; font-weight:650}
     .qa.open .a{max-height: 220px}
 
-    /* CTA FORM */
+    /* CTA + FORM */
     .cta{
       border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -461,9 +460,9 @@
       content:"";
       position:absolute; inset:-1px;
       background:
-        radial-gradient(650px 260px at 18% 0%, rgba(34,211,238,.18), transparent 60%),
-        radial-gradient(520px 260px at 85% 0%, rgba(124,58,237,.22), transparent 60%),
-        radial-gradient(520px 380px at 60% 110%, rgba(244,114,182,.14), transparent 65%);
+        radial-gradient(650px 260px at 18% 0%, rgba(6,182,212,.14), transparent 60%),
+        radial-gradient(520px 260px at 85% 0%, rgba(109,40,217,.18), transparent 60%),
+        radial-gradient(520px 380px at 60% 110%, rgba(244,114,182,.10), transparent 65%);
       pointer-events:none;
     }
     .ctaInner{
@@ -480,7 +479,15 @@
       border-radius: var(--radius2);
       padding: 16px;
     }
-    label{display:block; font-size:12px; color:var(--muted); font-weight:850; letter-spacing:.08em; text-transform:uppercase; margin: 12px 0 6px}
+    label{
+      display:block;
+      font-size:11px;
+      color:rgba(167,178,214,.95);
+      font-weight: 950;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      margin: 12px 0 6px;
+    }
     input, textarea, select{
       width:100%;
       padding: 12px 12px;
@@ -489,64 +496,44 @@
       background: rgba(255,255,255,.06);
       color: var(--text);
       outline:none;
-      font-weight:650;
+      font-weight:700;
       transition: border-color .15s ease, background .15s ease;
     }
     input:focus, textarea:focus, select:focus{
-      border-color: rgba(34,211,238,.35);
+      border-color: rgba(6,182,212,.32);
       background: rgba(255,255,255,.09);
     }
     textarea{min-height: 96px; resize: vertical}
     .formRow{display:grid; grid-template-columns: 1fr 1fr; gap: 12px}
     .hint{margin:10px 0 0; color: var(--muted); font-weight:650; font-size:13px; line-height:1.45}
-    .tiny{font-size:12px; color: rgba(169,180,214,.9)}
-    .err{color: #FECACA; font-weight:800; font-size: 12px; margin-top: 8px; display:none}
-    .okmsg{color:#CFFBEA; font-weight:800; font-size: 13px; display:none}
+    .tiny{font-size:12px; color: rgba(167,178,214,.9)}
+    .err{color: #FECACA; font-weight:900; font-size: 12px; margin-top: 8px; display:none}
+    .okmsg{color:#CFFBEA; font-weight:900; font-size: 13px; display:none}
 
-    /* FOOTER */
-    footer{
-      padding: 26px 0 42px;
-      color: rgba(169,180,214,.9);
-    }
+    /* Footer */
+    footer{padding: 26px 0 42px; color: rgba(167,178,214,.92)}
     .foot{
-      border-top: 1px solid rgba(35,48,95,.45);
+      border-top: 1px solid rgba(34,48,92,.45);
       padding-top: 18px;
       display:flex; justify-content:space-between; gap: 18px; flex-wrap:wrap;
-      font-weight:650;
+      font-weight:700;
     }
     .links{display:flex; gap:14px; flex-wrap:wrap}
     .links a{opacity:.9}
     .links a:hover{opacity:1; text-decoration: underline}
 
-    /* FLOATING BLOBS */
-    .blob{
-      position:absolute; inset:auto;
-      filter: blur(40px);
-      opacity: .45;
-      pointer-events:none;
-      border-radius: 999px;
-      animation: floaty 10s ease-in-out infinite;
-      z-index:-1;
-    }
-    .blob.b1{width: 380px; height: 380px; left:-120px; top: 120px; background: rgba(124,58,237,.55)}
-    .blob.b2{width: 420px; height: 420px; right:-180px; top: 220px; background: rgba(34,211,238,.45); animation-duration: 12s}
-    .blob.b3{width: 340px; height: 340px; left: 35%; top: 980px; background: rgba(244,114,182,.32); animation-duration: 14s}
-    @keyframes floaty{
-      0%,100%{transform: translate(0,0) scale(1)}
-      50%{transform: translate(0,-22px) scale(1.04)}
-    }
-
-    /* RESPONSIVE */
+    /* Responsive */
     @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr; }
-      .heroCard{min-height: unset}
+      .heroGrid{grid-template-columns: 1fr;}
       .card{grid-column: span 6}
       .step{grid-column: span 6}
       .price{grid-column: span 6}
       .quote{grid-column: span 6}
       .ctaInner{grid-template-columns: 1fr}
+      .actions{min-width: unset}
+      .brand{min-width: unset}
     }
-    @media (max-width: 640px){
+    @media (max-width: 700px){
       .navlinks{display:none}
       .card,.step,.price,.quote{grid-column: span 12}
       .formRow{grid-template-columns: 1fr}
@@ -554,8 +541,6 @@
       .actions{width:100%}
       .actions .btn{flex:1}
     }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       *{animation:none !important; transition:none !important; scroll-behavior:auto !important;}
     }
@@ -563,37 +548,28 @@
 </head>
 
 <body>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-
-  <header class="top">
+  <header class="top" role="banner">
     <div class="wrap">
-      <nav class="nav">
-        <a class="brand" href="#inicio" aria-label="Inicio">
+      <nav class="nav" aria-label="Menú principal">
+        <a class="brand" href="#inicio">
           <div class="logo" aria-hidden="true"></div>
           <div>
-            <div style="font-size:14px; opacity:.9">Libro de Reclamaciones</div>
-            <div style="font-size:12px; color:var(--muted); font-weight:750">Digital • Rápido • Ordenado</div>
+            <div style="font-size:14px; opacity:.95">Libro de Reclamaciones</div>
+            <small>Digital • Profesional • Ordenado</small>
           </div>
         </a>
 
         <div class="navlinks" role="navigation" aria-label="Secciones">
-          <a href="#beneficios">Beneficios</a>
-          <a href="#como-funciona">Cómo funciona</a>
-          <a href="#planes">Planes</a>
-          <a href="#faq">FAQ</a>
+          <a href="#beneficios" data-spy>Beneficios</a>
+          <a href="#como-funciona" data-spy>Flujo</a>
+          <a href="#planes" data-spy>Planes</a>
+          <a href="#faq" data-spy>FAQ</a>
+          <a href="#contacto" data-spy>Contacto</a>
         </div>
 
         <div class="actions">
-          <a class="btn" href="#demo">
-            <span class="icon" aria-hidden="true"></span>
-            Ver demo
-          </a>
-          <a class="btn primary" href="#contacto">
-            <span class="icon" aria-hidden="true"></span>
-            Solicitar implementación
-          </a>
+          <a class="btn" href="#demo"><span class="icon" aria-hidden="true"></span>Ver demo</a>
+          <a class="btn primary" href="#contacto"><span class="icon" aria-hidden="true"></span>Solicitar</a>
         </div>
       </nav>
     </div>
@@ -601,81 +577,60 @@
 
   <main id="inicio" class="hero">
     <div class="wrap">
-      <div class="grid">
+      <div class="heroGrid">
         <div>
-          <div class="pill">
-            <span class="dot" aria-hidden="true"></span>
-            Implementación en horas, no en semanas
-          </div>
+          <div class="pill"><span class="dot" aria-hidden="true"></span>Implementación rápida + experiencia premium</div>
 
-          <h1 class="h1">
-            Tu <span class="glow">Libro de Reclamaciones</span> que sí se ve moderno:
-            <span class="grad">cumple, atiende y convierte</span>.
+          <h1>
+            Un <span class="glow">Libro de Reclamaciones</span> con look profesional:
+            <span class="grad">cumple, ordena y mejora tu atención</span>.
           </h1>
 
           <p class="lead">
-            Centraliza reclamos y quejas con un flujo ordenado: registro, seguimiento, reportes y evidencias.
-            Diseñado para atención al cliente sin fricción (y con una experiencia visual premium).
+            Registra reclamos y quejas con un flujo claro: recepción, seguimiento, evidencias y reportes.
+            Una interfaz moderna que genera confianza (y reduce fricción al cliente).
           </p>
 
           <div class="heroCTAs">
-            <a class="btn primary" href="#contacto">
-              <span class="icon" aria-hidden="true"></span>
-              Quiero el libro digital
-            </a>
-            <a class="btn" href="#planes">
-              <span class="icon" aria-hidden="true"></span>
-              Ver planes
-            </a>
-            <a class="btn" href="#faq">
-              <span class="icon" aria-hidden="true"></span>
-              Resolver dudas
-            </a>
+            <a class="btn primary" href="#contacto"><span class="icon" aria-hidden="true"></span>Quiero implementarlo</a>
+            <a class="btn" href="#planes"><span class="icon" aria-hidden="true"></span>Ver planes</a>
+            <a class="btn" href="#faq"><span class="icon" aria-hidden="true"></span>Dudas</a>
           </div>
 
-          <div class="heroMeta">
-            <span class="check"><span class="icon" aria-hidden="true"></span> Notificaciones automáticas</span>
-            <span class="check"><span class="icon" aria-hidden="true"></span> Reportes y exportación</span>
-            <span class="check"><span class="icon" aria-hidden="true"></span> Panel de seguimiento</span>
+          <div class="meta">
+            <span class="tag"><span class="icon" aria-hidden="true"></span>Notificaciones</span>
+            <span class="tag"><span class="icon" aria-hidden="true"></span>Panel de casos</span>
+            <span class="tag"><span class="icon" aria-hidden="true"></span>Exportación</span>
           </div>
         </div>
 
         <aside class="heroCard" id="demo" aria-label="Demo visual">
           <div class="miniHeader">
-            <span>Vista previa • Panel</span>
+            <span>Vista previa • Panel de casos</span>
             <span class="badge">DEMO</span>
           </div>
 
           <div class="mock">
             <div class="tile">
-              <div class="chip"><span class="spark" aria-hidden="true"></span> Nuevo reclamo</div>
-              <h3>Registro rápido (menos de 2 minutos)</h3>
-              <p>Formulario amigable con campos claros, adjuntos y confirmación de recepción.</p>
-              <div class="row">
-                <span>Completado</span>
-                <span style="color:#CFFBEA">72%</span>
-              </div>
+              <div class="chip"><span class="spark" aria-hidden="true"></span> Nuevo registro</div>
+              <h3>Formulario claro (menos de 2 minutos)</h3>
+              <p>Campos esenciales, adjuntos y confirmación inmediata para el cliente.</p>
+              <div class="row"><span>Completado</span><span style="color:#CFFBEA">72%</span></div>
               <div class="bar" aria-hidden="true"><span></span></div>
             </div>
 
             <div class="tile">
               <div class="chip"><span class="spark" aria-hidden="true"></span> Seguimiento</div>
-              <h3>Estados y trazabilidad</h3>
+              <h3>Estados + trazabilidad</h3>
               <p>“Recibido → En evaluación → Resuelto”. Historial con fechas y responsables.</p>
-              <div class="row">
-                <span>Tiempo promedio</span>
-                <span style="color:#BFF7FF">48h</span>
-              </div>
+              <div class="row"><span>Tiempo promedio</span><span style="color:#BFF7FF">48h</span></div>
             </div>
 
             <div class="tile">
               <div class="chip"><span class="spark" aria-hidden="true"></span> Reportes</div>
-              <h3>Insights para mejorar</h3>
-              <p>Motivos frecuentes, canales, tiempos de respuesta y exportación a Excel/CSV.</p>
-              <div class="row">
-                <span>Satisfacción</span>
-                <span style="color:#FDE68A">4.6/5</span>
-              </div>
+              <h3>Decisiones con datos</h3>
+              <p>Motivos, canales, tiempos y exportación a CSV/Excel para tu equipo.</p>
+              <div class="row"><span>Indicador</span><span style="color:#FDE68A">4.6/5</span></div>
             </div>
           </div>
         </aside>
@@ -688,30 +643,28 @@
       <div class="sectionHead">
         <div>
           <div class="kicker">Beneficios</div>
-          <h2 class="h2">Ordena tus reclamos sin perder empatía</h2>
+          <h2>Más confianza para el cliente, más control para tu operación</h2>
         </div>
-        <p class="sub">
-          Menos fricción para el cliente, más control para tu equipo y mejor visibilidad para la gerencia.
-        </p>
+        <p class="sub">Una experiencia ordenada reduce fricción y mejora la percepción de tu marca.</p>
       </div>
 
       <div class="cards">
         <article class="card">
           <div class="chip"><span class="spark" aria-hidden="true"></span> Experiencia</div>
-          <h3>Formularios claros y confiables</h3>
-          <p>Reduce abandono con una interfaz limpia, validación inteligente y confirmación inmediata.</p>
+          <h3>Interfaz limpia y profesional</h3>
+          <p>Diseño claro, validación y confirmación inmediata. Menos abandono, más registros correctos.</p>
         </article>
 
         <article class="card">
           <div class="chip"><span class="spark" aria-hidden="true"></span> Gestión</div>
-          <h3>Seguimiento y responsables</h3>
-          <p>Asigna, clasifica y monitorea cada caso con estados, comentarios internos y evidencias.</p>
+          <h3>Seguimiento de punta a punta</h3>
+          <p>Estados, responsables y evidencias para gestionar sin perder información ni contexto.</p>
         </article>
 
         <article class="card">
-          <div class="chip"><span class="spark" aria-hidden="true"></span> Control</div>
-          <h3>Reportes para decisiones</h3>
-          <p>Mide tiempos, causas y reincidencia. Exporta y presenta resultados con indicadores.</p>
+          <div class="chip"><span class="spark" aria-hidden="true"></span> Reportes</div>
+          <h3>Indicadores para mejorar</h3>
+          <p>Analiza causas y tiempos de respuesta. Exporta reportes para reuniones y auditorías.</p>
         </article>
       </div>
     </div>
@@ -721,34 +674,32 @@
     <div class="wrap">
       <div class="sectionHead">
         <div>
-          <div class="kicker">Cómo funciona</div>
-          <h2 class="h2">Un flujo simple que tu equipo adopta rápido</h2>
+          <div class="kicker">Flujo</div>
+          <h2>Un proceso simple que tu equipo adopta rápido</h2>
         </div>
-        <p class="sub">
-          Desde el registro hasta la resolución: todo queda documentado y listo para auditoría interna.
-        </p>
+        <p class="sub">Desde el registro hasta el cierre: trazabilidad completa y un panel fácil de usar.</p>
       </div>
 
       <div class="steps">
         <div class="step">
           <div class="num">1</div>
-          <h3>El cliente registra</h3>
-          <p>Formulario online con datos esenciales, adjuntos y canal de contacto.</p>
+          <h3>Registro</h3>
+          <p>El cliente completa el formulario y adjunta evidencias (si aplica).</p>
         </div>
         <div class="step">
           <div class="num">2</div>
-          <h3>Tu equipo recibe</h3>
-          <p>Notificación y creación automática del caso con número de seguimiento.</p>
+          <h3>Recepción</h3>
+          <p>Se genera un caso con número de seguimiento y notificación automática.</p>
         </div>
         <div class="step">
           <div class="num">3</div>
-          <h3>Se gestiona el caso</h3>
-          <p>Asignación, etiquetas, comentarios, evidencias y tiempos controlados.</p>
+          <h3>Gestión</h3>
+          <p>Asignación a responsable, seguimiento interno, notas y cambios de estado.</p>
         </div>
         <div class="step">
           <div class="num">4</div>
-          <h3>Respuesta y cierre</h3>
-          <p>Comunicación al cliente y cierre con trazabilidad + reporte final.</p>
+          <h3>Cierre</h3>
+          <p>Respuesta al cliente y cierre con registro final para reportes.</p>
         </div>
       </div>
     </div>
@@ -759,17 +710,15 @@
       <div class="sectionHead">
         <div>
           <div class="kicker">Planes</div>
-          <h2 class="h2">Elige el nivel de control que necesitas</h2>
+          <h2>Elige el nivel de gestión que necesitas</h2>
         </div>
-        <p class="sub">
-          Ajusta tu plan por volumen, canales y necesidades de reportes. (Precios referenciales)
-        </p>
+        <p class="sub">Puedes ajustar volumen, usuarios, sedes e integraciones según tu operación.</p>
       </div>
 
       <div class="pricing">
         <div class="price">
           <div class="tag">Starter</div>
-          <h3>Para negocios pequeños</h3>
+          <h3>Base sólida</h3>
           <div class="money">S/ 149</div>
           <p class="per">/ mes</p>
           <ul class="list">
@@ -778,12 +727,12 @@
             <li><span class="tick" aria-hidden="true"></span> Exportación CSV</li>
             <li><span class="tick" aria-hidden="true"></span> 2 usuarios</li>
           </ul>
-          <a class="btn" href="#contacto"><span class="icon" aria-hidden="true"></span> Solicitar</a>
+          <a class="btn" href="#contacto"><span class="icon" aria-hidden="true"></span>Solicitar</a>
         </div>
 
         <div class="price featured">
           <div class="tag">Pro</div>
-          <h3>Para equipos de atención</h3>
+          <h3>Para atención al cliente</h3>
           <div class="money">S/ 299</div>
           <p class="per">/ mes</p>
           <ul class="list">
@@ -792,12 +741,12 @@
             <li><span class="tick" aria-hidden="true"></span> Reportes avanzados</li>
             <li><span class="tick" aria-hidden="true"></span> 10 usuarios</li>
           </ul>
-          <a class="btn primary" href="#contacto"><span class="icon" aria-hidden="true"></span> Elegir Pro</a>
+          <a class="btn primary" href="#contacto"><span class="icon" aria-hidden="true"></span>Elegir Pro</a>
         </div>
 
         <div class="price">
           <div class="tag">Enterprise</div>
-          <h3>Para operaciones grandes</h3>
+          <h3>Operación avanzada</h3>
           <div class="money">A medida</div>
           <p class="per">Integraciones + roles</p>
           <ul class="list">
@@ -806,7 +755,7 @@
             <li><span class="tick" aria-hidden="true"></span> Auditoría + logs</li>
             <li><span class="tick" aria-hidden="true"></span> Soporte prioritario</li>
           </ul>
-          <a class="btn" href="#contacto"><span class="icon" aria-hidden="true"></span> Hablar con ventas</a>
+          <a class="btn" href="#contacto"><span class="icon" aria-hidden="true"></span>Hablar con ventas</a>
         </div>
       </div>
     </div>
@@ -817,22 +766,22 @@
       <div class="sectionHead">
         <div>
           <div class="kicker">Confianza</div>
-          <h2 class="h2">Una atención más ordenada se nota</h2>
+          <h2>Se nota cuando el proceso está ordenado</h2>
         </div>
-        <p class="sub">Ejemplos de mensajes que suelen recibir equipos cuando el flujo está bien implementado.</p>
+        <p class="sub">Ejemplos de mensajes típicos al profesionalizar el flujo de reclamos.</p>
       </div>
 
       <div class="testis">
         <div class="quote">
-          <p>“Ahora podemos responder más rápido y con historial completo. Menos discusiones, más solución.”</p>
+          <p>“Ahora respondemos más rápido y con historial completo. Menos fricción, más solución.”</p>
           <div class="who"><div class="ava" aria-hidden="true"></div> Jefa de Atención • Retail</div>
         </div>
         <div class="quote">
-          <p>“El panel nos dio visibilidad del motivo real de los reclamos. Con eso ajustamos procesos.”</p>
+          <p>“El panel nos dio visibilidad de causas reales. Pudimos corregir procesos y medir mejoras.”</p>
           <div class="who"><div class="ava" aria-hidden="true"></div> Operaciones • Servicios</div>
         </div>
         <div class="quote">
-          <p>“Se ve profesional y el cliente siente que su caso sí está siendo atendido.”</p>
+          <p>“La interfaz se ve seria y el cliente siente que su caso sí está siendo atendido.”</p>
           <div class="who"><div class="ava" aria-hidden="true"></div> Gerencia • Salud</div>
         </div>
       </div>
@@ -844,50 +793,27 @@
       <div class="sectionHead">
         <div>
           <div class="kicker">FAQ</div>
-          <h2 class="h2">Preguntas frecuentes</h2>
+          <h2>Preguntas frecuentes</h2>
         </div>
-        <p class="sub">Respuestas rápidas para que avances hoy mismo.</p>
+        <p class="sub">Respuestas rápidas para avanzar sin fricción.</p>
       </div>
 
       <div class="faq" role="list">
         <div class="qa open" role="listitem">
-          <button class="q" type="button">
-            ¿Se puede incrustar en mi web?
-            <span aria-hidden="true">+</span>
-          </button>
-          <div class="a">
-            <p>Sí. Puedes embeber el formulario como widget (iframe) o integrarlo como página propia con tu dominio y estilo.</p>
-          </div>
+          <button class="q" type="button">¿El menú se queda fijo al hacer scroll?<span aria-hidden="true">+</span></button>
+          <div class="a"><p>Sí. El header es <strong>sticky</strong> y además se compacta al hacer scroll para no ocupar espacio.</p></div>
         </div>
-
         <div class="qa" role="listitem">
-          <button class="q" type="button">
-            ¿Incluye número de seguimiento y confirmación?
-            <span aria-hidden="true">+</span>
-          </button>
-          <div class="a">
-            <p>Incluye confirmación en pantalla y número de caso. También puede enviar notificación por correo según tu configuración.</p>
-          </div>
+          <button class="q" type="button">¿Se puede incrustar en mi web?<span aria-hidden="true">+</span></button>
+          <div class="a"><p>Sí. Puedes embeber el formulario como widget o usar una página propia con tu dominio.</p></div>
         </div>
-
         <div class="qa" role="listitem">
-          <button class="q" type="button">
-            ¿Puedo exportar reportes?
-            <span aria-hidden="true">+</span>
-          </button>
-          <div class="a">
-            <p>Sí. Exportación a CSV/Excel y reportes con filtros por fechas, sede, tipo y estado.</p>
-          </div>
+          <button class="q" type="button">¿Incluye número de seguimiento?<span aria-hidden="true">+</span></button>
+          <div class="a"><p>Incluye número de caso y confirmación. La notificación por correo se activa al conectarlo a tu backend.</p></div>
         </div>
-
         <div class="qa" role="listitem">
-          <button class="q" type="button">
-            ¿Se adapta a mi marca?
-            <span aria-hidden="true">+</span>
-          </button>
-          <div class="a">
-            <p>Claro. Puedes cambiar colores, tipografías, textos, logo y estilo visual para que se vea 100% de tu marca.</p>
-          </div>
+          <button class="q" type="button">¿Puedo exportar reportes?<span aria-hidden="true">+</span></button>
+          <div class="a"><p>Sí. CSV/Excel y reportes con filtros por fechas, sede, tipo y estado.</p></div>
         </div>
       </div>
     </div>
@@ -898,22 +824,18 @@
       <div class="sectionHead">
         <div>
           <div class="kicker">Implementación</div>
-          <h2 class="h2">Pídelo listo para usar</h2>
+          <h2>Pídelo listo para usar</h2>
         </div>
-        <p class="sub">Déjanos tus datos y te compartimos una propuesta y demo personalizada.</p>
+        <p class="sub">Déjanos tus datos y te enviamos una propuesta y demo personalizada.</p>
       </div>
 
       <div class="cta">
         <div class="ctaInner">
           <div>
-            <div class="pill" style="margin-bottom:12px">
-              <span class="dot" aria-hidden="true"></span>
-              Respuesta rápida • Soporte humano
-            </div>
+            <div class="pill" style="margin-bottom:12px"><span class="dot" aria-hidden="true"></span>Respuesta rápida • Soporte humano</div>
             <h3 style="margin:0 0 10px; font-size:20px; letter-spacing:-.2px">Activa tu Libro de Reclamaciones digital</h3>
             <p class="sub" style="margin:0 0 14px">
-              Ideal para webs, sedes físicas (QR) y equipos que necesitan trazabilidad real. Si quieres,
-              también lo integramos con tu correo/CRM/Helpdesk.
+              Ideal para web, sedes físicas (QR) y equipos que necesitan trazabilidad real. También podemos integrarlo con tu correo/CRM/Helpdesk.
             </p>
 
             <div class="cards" style="margin-top: 14px">
@@ -965,7 +887,7 @@
             </button>
 
             <div class="err" id="errMsg">Revisa los campos obligatorios (nombre, empresa, correo y tamaño).</div>
-            <div class="okmsg" id="okMsg">¡Listo! Hemos registrado tu solicitud (demo). Puedes conectar esto a tu backend.</div>
+            <div class="okmsg" id="okMsg">¡Listo! Hemos registrado tu solicitud (demo). Puedes conectarlo a tu backend.</div>
 
             <p class="hint tiny">
               Al enviar, aceptas ser contactado para fines de implementación. *Este formulario es demo (sin envío real).
@@ -982,14 +904,14 @@
         <div style="display:flex; gap:12px; align-items:center">
           <div class="logo" aria-hidden="true" style="width:34px; height:34px; border-radius:14px"></div>
           <div>
-            <div style="font-weight:900; color: var(--text)">Libro de Reclamaciones</div>
-            <div style="font-size:12px">© <span id="year"></span> • Hecho para atención al cliente moderna</div>
+            <div style="font-weight:950; color: var(--text)">Libro de Reclamaciones</div>
+            <div style="font-size:12px">© <span id="year"></span> • Atención al cliente profesional</div>
           </div>
         </div>
 
         <div class="links" aria-label="Enlaces">
           <a href="#beneficios">Beneficios</a>
-          <a href="#como-funciona">Cómo funciona</a>
+          <a href="#como-funciona">Flujo</a>
           <a href="#planes">Planes</a>
           <a href="#contacto">Contacto</a>
         </div>
@@ -998,16 +920,12 @@
   </footer>
 
   <script>
-    // Smooth scroll for in-page anchors
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const id = a.getAttribute('href');
-        const el = document.querySelector(id);
-        if(!el) return;
-        e.preventDefault();
-        el.scrollIntoView({behavior: 'smooth', block: 'start'});
-      });
-    });
+    // Compacta el header al hacer scroll
+    const setScrolled = () => {
+      document.body.classList.toggle('scrolled', window.scrollY > 8);
+    };
+    window.addEventListener('scroll', setScrolled, {passive:true});
+    setScrolled();
 
     // FAQ accordion
     document.querySelectorAll('.qa .q').forEach(btn => {
@@ -1018,6 +936,24 @@
         if(!wasOpen) item.classList.add('open');
       });
     });
+
+    // Scroll spy (marca la sección activa en el menú)
+    const links = Array.from(document.querySelectorAll('[data-spy]'));
+    const sections = links
+      .map(a => document.querySelector(a.getAttribute('href')))
+      .filter(Boolean);
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          links.forEach(a => a.classList.remove('active'));
+          const active = links.find(a => a.getAttribute('href') === `#${entry.target.id}`);
+          if(active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 });
+
+    sections.forEach(s => io.observe(s));
 
     // Demo form validation (no real submit)
     const form = document.getElementById('leadForm');
