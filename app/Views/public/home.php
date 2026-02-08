@@ -43,12 +43,12 @@ $displayName = htmlspecialchars($tenant['nombre_comercial'] ?? $tenant['razon_so
                             Consultar estado de reclamo
                         </a>
                     </div>
-                    <div class="col-md-4">
+                    <!--<div class="col-md-4">
                         <a class="btn btn-outline-secondary" href="#info">
                             <i class="bi bi-shield-check me-1"></i>
                             Políticas y plazos
                         </a>
-                    </div>
+                    </div>-->
                 </div>
 
 

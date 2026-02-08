@@ -27,7 +27,25 @@ $oldTutorDocTipo = strtoupper($old['tutor_doc_tipo'] ?? 'DNI');
 $oldContactoDocTipo = strtoupper($old['contacto_doc_tipo'] ?? 'DNI');
 
 $oldBienTipo = strtoupper($old['bien_tipo'] ?? '');
+$displayName = htmlspecialchars($tenant['nombre_comercial'] ?? $tenant['razon_social'] ?? 'Empresa');
 ?>
+
+<div class="lr-hero mb-4">
+  <h1><?= $displayName ?></h1>
+  <div class="sub">
+    <div style="font-size:18px; font-weight:700;">Libro de Reclamaciones</div>
+    <small>
+      Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, esta institución cuenta con un Libro de Reclamaciones Virtual a su disposición.
+    </small>
+  </div>
+
+  <div class="actions no-print">
+    <a class="btn btn-outline-white btn-sm" href="/seguimiento">
+      Consultar Reclamo
+    </a>
+  </div>
+</div>
+
 
 <h1 class="h3 fw-bold mb-1">Registrar reclamo / queja</h1>
 <p class="text-body-secondary mb-4">
@@ -506,13 +524,17 @@ $oldBienTipo = strtoupper($old['bien_tipo'] ?? '');
                 <i class="bi bi-send me-1"></i> Enviar
               </button>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </div>
 </form>
+<div class="lr-footer-note">
+  Una vez registrada tu reclamación, la empresa la recibirá y dará inicio al proceso de atención. Te enviaremos un correo de confirmación con un código de seguimiento, el cual te permitirá conocer el estado de tu solicitud en todo momento.
+  <br>
+  Recibirás una respuesta en un plazo máximo de 15 días hábiles, conforme a lo establecido por la Ley N.° 29571 - Código de Protección y Defensa del Consumidor.
+</div>
 
 <script>
   (() => {
