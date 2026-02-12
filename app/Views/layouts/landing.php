@@ -529,14 +529,14 @@
         <div class="navlinks" role="navigation" aria-label="Secciones">
           <a href="#beneficios" data-spy>Beneficios</a>
           <a href="#como-funciona" data-spy>Flujo</a>
-          <a href="#planes" data-spy>Planes</a>
+          <!--<a href="#planes" data-spy>Planes</a>-->
           <a href="#faq" data-spy>FAQ</a>
-          <a href="#contacto" data-spy>Contacto</a>
+          <a href="https://wa.me/51986067472?text=Hola,%20Me%20interesa%20el%20Libro%20de%20Reclamos" data-spy>Contacto</a>
         </div>
 
         <div class="actions">
-          <a class="btn" href="#demo">Ver demo</a>
-          <a class="btn primary" href="#contacto">Solicitar</a>
+          <a class="btn" href="https://demo.websigi.com">Ver demo</a>
+          <a class="btn primary" href="https://wa.me/51986067472?text=Hola,%20Me%20interesa%20el%20Libro%20de%20Reclamos">Solicitar</a>
         </div>
       </nav>
     </div>
@@ -559,8 +559,8 @@
           </p>
 
           <div class="heroCTAs">
-            <a class="btn primary" href="#contacto">Quiero implementarlo</a>
-            <a class="btn" href="#planes">Ver planes</a>
+            <a class="btn primary" href="https://wa.me/51986067472?text=Hola,%20Me%20interesa%20el%20Libro%20de%20Reclamos">Quiero implementarlo</a>
+            <!--<a class="btn" href="#planes">Ver planes</a>-->
             <a class="btn" href="#faq">Dudas</a>
           </div>
 
@@ -582,7 +582,7 @@
               <div class="chip"><span class="spark" aria-hidden="true"></span> Nuevo registro</div>
               <h3>Formulario claro (menos de 2 minutos)</h3>
               <p>Campos esenciales, adjuntos y confirmación inmediata para el cliente.</p>
-              <div class="row"><span>Completado</span><span style="color:#0F5132">72%</span></div>
+              <!--<div class="row"><span>Completado</span><span style="color:#0F5132">72%</span></div>-->
               <div class="bar" aria-hidden="true"><span></span></div>
             </div>
 
@@ -671,7 +671,7 @@
       </div>
     </div>
   </section>
-
+  <!--
   <section id="planes">
     <div class="wrap">
       <div class="sectionHead">
@@ -754,7 +754,7 @@
       </div>
     </div>
   </section>
-
+-->
   <section id="faq">
     <div class="wrap">
       <div class="sectionHead">
@@ -766,17 +766,14 @@
       </div>
 
       <div class="faq" role="list">
+        
         <div class="qa open" role="listitem">
-          <button class="q" type="button">¿El menú se mantiene fijo al hacer scroll?<span aria-hidden="true">+</span></button>
-          <div class="a"><p>Sí. El header es <strong>sticky</strong> con z-index alto, por eso se mantiene visible en toda la página.</p></div>
-        </div>
-        <div class="qa" role="listitem">
-          <button class="q" type="button">¿Se puede incrustar en mi web?<span aria-hidden="true">+</span></button>
-          <div class="a"><p>Sí. Puedes embeber el formulario como widget o usar una página propia con tu dominio.</p></div>
+          <button class="q" type="button">¿Cúanto tiempo demora integrar en mi web?<span aria-hidden="true">+</span></button>
+          <div class="a"><p>El proceso de activación solo demora 2 minutos.</p></div>
         </div>
         <div class="qa" role="listitem">
           <button class="q" type="button">¿Incluye número de seguimiento?<span aria-hidden="true">+</span></button>
-          <div class="a"><p>Incluye número de caso y confirmación. La notificación por correo se activa al conectarlo a tu backend.</p></div>
+          <div class="a"><p>Incluye número de caso y confirmación. La notificación por correo al cliente y personal de tu empresa.</p></div>
         </div>
         <div class="qa" role="listitem">
           <button class="q" type="button">¿Puedo exportar reportes?<span aria-hidden="true">+</span></button>
@@ -816,49 +813,6 @@
               </div>
             </div>
           </div>
-
-          <form class="form" id="leadForm" novalidate>
-            <div class="formRow">
-              <div>
-                <label for="name">Nombre</label>
-                <input id="name" name="name" placeholder="Tu nombre" autocomplete="name" required />
-              </div>
-              <div>
-                <label for="company">Empresa</label>
-                <input id="company" name="company" placeholder="Nombre de tu negocio" required />
-              </div>
-            </div>
-
-            <div class="formRow">
-              <div>
-                <label for="email">Correo</label>
-                <input id="email" name="email" placeholder="tucorreo@empresa.com" type="email" autocomplete="email" required />
-              </div>
-              <div>
-                <label for="size">Tamaño</label>
-                <select id="size" name="size" required>
-                  <option value="" selected disabled>Selecciona…</option>
-                  <option>1 sede / pequeño</option>
-                  <option>2–5 sedes</option>
-                  <option>6+ sedes</option>
-                </select>
-              </div>
-            </div>
-
-            <label for="message">Qué necesitas</label>
-            <textarea id="message" name="message" placeholder="Ej: Quiero libro digital con QR + reportes mensuales y 5 usuarios."></textarea>
-
-            <button class="btn primary" type="submit" style="width:100%; margin-top: 12px">
-              Enviar solicitud
-            </button>
-
-            <div class="err" id="errMsg">Revisa los campos obligatorios (nombre, empresa, correo y tamaño).</div>
-            <div class="okmsg" id="okMsg">¡Listo! Hemos registrado tu solicitud (demo). Puedes conectarlo a tu backend.</div>
-
-            <p class="hint tiny">
-              Al enviar, aceptas ser contactado para fines de implementación. *Este formulario es demo (sin envío real).
-            </p>
-          </form>
         </div>
       </div>
     </div>
