@@ -12,7 +12,7 @@
 
   <!-- Iconos (opcional pero recomendado) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+<link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
   <style>
     :root {
       --app-bg: #f6f7fb;

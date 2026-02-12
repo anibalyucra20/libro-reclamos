@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Libro de Reclamaciones | Profesional</title>
   <meta name="description" content="Landing profesional para Libro de Reclamaciones: formulario, seguimiento, reportes, FAQ y CTA." />
+  <link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
 
   <style>
     :root {
@@ -1182,7 +1183,7 @@
         <div class="qa open" role="listitem">
           <button class="q" type="button">¿Cúanto tiempo demora integrar en mi web?<span aria-hidden="true">+</span></button>
           <div class="a">
-            <p>El proceso de activación solo demora 2 minutos.</p>
+            <p>El proceso de activación solo demora 10 minutos.</p>
           </div>
         </div>
         <div class="qa" role="listitem">
@@ -1226,7 +1227,7 @@
               </div>
               <div class="card" style="grid-column: span 6; min-height: unset;">
                 <div class="chip"><span class="spark" aria-hidden="true"></span> Opcional</div>
-                <p>Integración, roles avanzados, SLA, multi-sede, automatizaciones.</p>
+                <p>Integración, roles avanzados, multi-sede, automatizaciones.</p>
               </div>
             </div>
           </div>
