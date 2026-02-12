@@ -25,20 +25,16 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
     <div class="card border-0 shadow-sm">
       <div class="card-body">
         <div class="fw-bold mb-2">Datos</div>
-
         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>" class="row g-3">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
-
           <div class="col-12">
             <label class="form-label">Nombres</label>
             <input class="form-control" name="nombres" value="<?= htmlspecialchars((string)($u['nombres'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" required>
           </div>
-
           <div class="col-12">
             <label class="form-label">Apellidos</label>
             <input class="form-control" name="apellidos" value="<?= htmlspecialchars((string)($u['apellidos'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
           </div>
-
           <div class="col-12">
             <label class="form-label">Estado</label>
             <select class="form-select" name="estado">
@@ -46,14 +42,11 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
               <option value="INACTIVO" <?= ($u['estado'] ?? '') === 'INACTIVO' ? 'selected' : '' ?>>INACTIVO</option>
             </select>
           </div>
-
           <div class="col-12">
             <button class="btn btn-primary" type="submit"><i class="bi bi-save me-1"></i> Guardar</button>
           </div>
         </form>
-
         <hr>
-
         <div class="fw-bold mb-2">Reset password</div>
         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/password" class="d-flex gap-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
@@ -69,7 +62,6 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
     <div class="card border-0 shadow-sm">
       <div class="card-body">
         <div class="fw-bold mb-2">Permisos (empresa actual)</div>
-
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
@@ -109,9 +101,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             </tbody>
           </table>
         </div>
-
         <hr>
-
         <div class="fw-bold mb-2">Agregar Permiso</div>
         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/scope" class="row g-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
