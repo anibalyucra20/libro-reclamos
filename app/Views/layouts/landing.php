@@ -1002,7 +1002,7 @@
             <div class="tile">
               <div class="chip"><span class="spark" aria-hidden="true"></span> Seguimiento</div>
               <h3>Estados + trazabilidad</h3>
-              <p>“Recibido → En evaluación → Resuelto”. Historial con fechas y responsables.</p>
+              <p>“Recibido → Resuelto”. Historial con fechas y responsables.</p>
               <div class="row"><span>Tiempo promedio</span><span style="color:#1E40AF">48h</span></div>
             </div>
 
@@ -1217,7 +1217,7 @@
             <div class="pill" style="margin-bottom:12px"><span class="dot" aria-hidden="true"></span>Respuesta rápida • Soporte humano</div>
             <h3 style="margin:0 0 10px; font-size:20px; letter-spacing:-.2px">Activa tu Libro de Reclamaciones digital</h3>
             <p class="sub" style="margin:0 0 14px">
-              Ideal para web, sedes físicas (QR) y equipos que necesitan trazabilidad real. También podemos integrarlo con tu correo/CRM/Helpdesk.
+              Ideal para web, sedes físicas (QR) y equipos que necesitan trazabilidad real.
             </p>
 
             <div class="cards" style="margin-top: 14px">
