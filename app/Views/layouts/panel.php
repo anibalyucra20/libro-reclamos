@@ -50,9 +50,7 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
   $__pathNorm = substr($__pathNorm, strlen($__panelPrefix));
   $__pathNorm = $__pathNorm === '' ? '/' : $__pathNorm;
 }
-
 ?>
-
 <!doctype html>
 <html lang="es">
 
@@ -65,7 +63,7 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
+  <link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
   <style>
     :root {
       --app-bg: #f6f7fb;
@@ -188,9 +186,9 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
             data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
             <i class="bi bi-list"></i>
           </button>
-
-          <a class="navbar-brand d-flex align-items-center gap-2 fw-bold mb-0" href="<?= $__panelPrefix ?>/reclamos">
-            <span class="brand-badge" aria-hidden="true"></span>
+          
+          <a class="navbar-brand d-flex align-items-center gap-2 fw-bold mb-0" href="<?= $__panelPrefix ?>/">
+            <span class="" aria-hidden="true"><i class="bi bi-book me-1"></i></span>
             <span>Panel</span>
           </a>
 

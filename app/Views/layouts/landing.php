@@ -932,7 +932,7 @@
     <div class="wrap">
       <nav class="nav" aria-label="Menú principal">
         <a class="brand" href="#inicio">
-          <div class="logo" aria-hidden="true"></div>
+          <div class="logo" aria-hidden="true"><i class="bi bi-book me-1"></i></div>
           <div>
             <div style="font-size:14px; opacity:.98">Libro de Reclamaciones</div>
             <small>Digital • Profesional • Ordenado</small>
@@ -1250,7 +1250,7 @@
         <div class="links" aria-label="Enlaces">
           <a href="#beneficios">Beneficios</a>
           <a href="#como-funciona">Flujo</a>
-          <a href="#planes">Planes</a>
+          <!--<a href="#planes">Planes</a>-->
           <a href="#contacto">Contacto</a>
         </div>
       </div>
