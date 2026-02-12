@@ -919,6 +919,10 @@
         scroll-behavior: auto !important;
       }
     }
+
+    #contacto .sub {
+      max-width: 100%;
+    }
   </style>
 </head>
 
