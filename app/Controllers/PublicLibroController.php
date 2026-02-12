@@ -387,14 +387,16 @@ final class PublicLibroController extends Controller
 
         // ------------ ENVIAR CORREO A USUARIO DE EMPRESA ---------------------------------
         $svc = new UsuariosRootService();
-        $usuario = $svc->findUserRootEmpresa($empresaId);
-        $cuerpo = "<p>Hola, " . $usuario['nombres'] . " " . $usuario['apellidos'] . "</p>
+        $usuarios = $svc->findUserRootEmpresa($empresaId);
+        foreach ($usuarios as $usuario) {
+          $cuerpo = "<p>Hola, " . $usuario['nombres'] . " " . $usuario['apellidos'] . "</p>
              <p>Se registro un nuevo " . $tipo . " para la empresa " . $usuario['razon_social'] . "</p>
              <p>Adjuntamos la constancia de " . $tipo . ": <strong>{$result['codigo_reclamo']}</strong> .</p>
              <p>También visualizarlo haciendo click  <a href='" . $url . "/seguimiento/{$result['evidencia_token']}'>Aquí<a></p>
              <p>Para poder ver mas detalles y/o registrar cambios haga click <a href='" . $url . "/panel/reclamos/{$result['id']}'>Aquí<a></p>";
-        $correo_usuario = $usuario['email'];
-        \App\Services\Mailer::sendWithPdf($correo_usuario, 'Nuevo reclamo Registrado', $cuerpo, $pdfBytes, $pdfName);
+          $correo_usuario = $usuario['email'];
+          \App\Services\Mailer::sendWithPdf($correo_usuario, 'Nuevo reclamo Registrado', $cuerpo, $pdfBytes, $pdfName);
+        }
       } catch (\Throwable $e) {
         \App\Services\Logger::error('EMAIL_FAIL', [
           'to' => $email,
