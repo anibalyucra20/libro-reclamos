@@ -75,7 +75,7 @@ final class UsuariosRootService
       FROM usuarios u
       INNER JOIN usuario_scope us ON us.usuario_id = u.id
       INNER JOIN empresas e ON e.id = us.empresa_id
-      WHERE e.id = $id_Empresa AND us.rol_id = 1
+      WHERE e.id = $id_Empresa AND (us.rol_id = 1 OR us.rol_id = 2)
       LIMIT 1
     ";
 
