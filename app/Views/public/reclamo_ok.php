@@ -53,15 +53,14 @@ $vencTxt   = htmlspecialchars((string)$venc, ENT_QUOTES, 'UTF-8');
         <div class="alert alert-light border d-flex gap-2 align-items-start mb-4" role="alert">
           <i class="bi bi-info-circle mt-1"></i>
           <div class="text-body-secondary">
-            Recomendación: toma una captura de esta pantalla o copia el código en un lugar seguro.
-            Si ingresaste un correo, podríamos usarlo para enviarte actualizaciones (si lo implementas luego).
+            Se envió un correo electronico a <?= htmlspecialchars($email) ?> con todos los detalles de tu reclamo/queja.
           </div>
         </div>
 
         <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end">
 
 
-          <a class="btn btn-outline-secondary" href="/constancia/<?= htmlspecialchars($token) ?>">Ver constancia (imprimible)</a>
+          <a class="btn btn-outline-secondary" href="/constancia/<?= htmlspecialchars($token) ?>/pdf">Descargar constancia</a>
           <a class="btn btn-outline-secondary" href="/seguimiento/<?= htmlspecialchars($token) ?>">Seguimiento</a>
           <a class="btn btn-outline-secondary" href="/">
             <i class="bi bi-house me-1"></i> Volver al inicio

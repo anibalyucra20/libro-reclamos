@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -64,6 +65,23 @@ final class UsuariosRootService
     $st = $this->pdo->prepare($sql);
     $st->execute($params);
     return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+  }
+
+  public function findUserRootEmpresa(Int $id_Empresa)
+  {
+    $sql = "
+      SELECT
+        u.id, u.nombres, u.apellidos, u.email, u.estado, u.created_at, e.razon_social
+      FROM usuarios u
+      INNER JOIN usuario_scope us ON us.usuario_id = u.id
+      INNER JOIN empresas e ON e.id = us.empresa_id
+      WHERE e.id = $id_Empresa AND us.rol_id = 1
+      LIMIT 1
+    ";
+
+    $st = $this->pdo->prepare($sql);
+    $st->execute();
+    return $st->fetch(PDO::FETCH_ASSOC);
   }
 
   public function createInicialEmpresaUser(array $data): int

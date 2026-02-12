@@ -157,33 +157,6 @@ $displayName = htmlspecialchars($tenant['nombre_comercial'] ?? $tenant['razon_so
                 </label>
               </div>
             </div>
-
-            <div class="col-12 col-md-6">
-              <label class="form-label" id="label_nombre_rs">Nombres <span class="text-danger">*</span></label>
-              <input
-                class="form-control <?= $has('consumidor_nombres') ? 'is-invalid' : '' ?>"
-                name="consumidor_nombres"
-                id="consumidor_nombres"
-                required
-                maxlength="160"
-                autocomplete="given-name"
-                value="<?= $val('consumidor_nombres') ?>">
-              <div class="invalid-feedback">
-                <?= $has('consumidor_nombres') ? $err('consumidor_nombres') : 'Ingresa tus nombres.' ?>
-              </div>
-            </div>
-
-            <div class="col-12 col-md-6" id="wrap_apellidos">
-              <label class="form-label">Apellidos</label>
-              <input
-                class="form-control"
-                name="consumidor_apellidos"
-                id="input_apellidos"
-                maxlength="160"
-                autocomplete="family-name"
-                value="<?= $val('consumidor_apellidos') ?>">
-            </div>
-
             <div class="col-12 col-md-6">
               <label class="form-label">Documento <span class="text-danger">*</span></label>
               <div class="input-group has-validation">
@@ -221,6 +194,34 @@ $displayName = htmlspecialchars($tenant['nombre_comercial'] ?? $tenant['razon_so
               </div>
               <div class="form-text">Ej.: DNI 12345678</div>
             </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" id="label_nombre_rs">Nombres <span class="text-danger">*</span></label>
+              <input
+                class="form-control <?= $has('consumidor_nombres') ? 'is-invalid' : '' ?>"
+                name="consumidor_nombres"
+                id="consumidor_nombres"
+                required
+                maxlength="160"
+                autocomplete="given-name"
+                value="<?= $val('consumidor_nombres') ?>">
+              <div class="invalid-feedback">
+                <?= $has('consumidor_nombres') ? $err('consumidor_nombres') : 'Ingresa tus nombres.' ?>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6" id="wrap_apellidos">
+              <label class="form-label">Apellidos</label>
+              <input
+                class="form-control"
+                name="consumidor_apellidos"
+                id="input_apellidos"
+                maxlength="160"
+                autocomplete="family-name"
+                value="<?= $val('consumidor_apellidos') ?>">
+            </div>
+
+
 
             <div class="col-12 col-md-6">
               <label class="form-label">Email</label>

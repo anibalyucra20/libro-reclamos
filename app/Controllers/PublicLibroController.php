@@ -9,6 +9,7 @@ use App\Services\Csrf;
 use App\Models\Establecimiento;
 use App\Models\Reclamo;
 use App\Services\Pdf;
+use App\Services\UsuariosRootService;
 use App\Core\View;
 
 final class PublicLibroController extends Controller
@@ -372,14 +373,28 @@ final class PublicLibroController extends Controller
           'reclamo' => $reclamoFull,
           'token' => $result['evidencia_token'],
         ]);
+        // ------------ ENVIAR CORREO A CLIENTE ---------------------------------
+        $cliente = $old['consumidor_nombres'] . ' ' . $old['consumidor_apellidos'];
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
         $pdfBytes = \App\Services\Pdf::fromHtml($html);
         $pdfName = 'constancia_' . $result['codigo_reclamo'] . '.pdf';
-        $body = "<p>Hola,</p>
-             <p>Adjuntamos la constancia de tu reclamo: <strong>{$result['codigo_reclamo']}</strong> .</p>
+        $body = "<p>Hola, " . $cliente . "</p>
+             <p>Tu " . $tipo . " Fue registrado</p>
+             <p>Adjuntamos la constancia de tu " . $tipo . ": <strong>{$result['codigo_reclamo']}</strong> .</p>
              <p>También puedes hacer seguimiento haciendo click  <a href='" . $url . "/seguimiento/{$result['evidencia_token']}'>Aquí<a></p>";
 
         \App\Services\Mailer::sendWithPdf($email, 'Constancia - Libro de Reclamaciones', $body, $pdfBytes, $pdfName);
+
+        // ------------ ENVIAR CORREO A USUARIO DE EMPRESA ---------------------------------
+        $svc = new UsuariosRootService();
+        $usuario = $svc->findUserRootEmpresa($empresaId);
+        $cuerpo = "<p>Hola, " . $usuario['nombres'] . " " . $usuario['apellidos'] . "</p>
+             <p>Se registro un nuevo " . $tipo . " para la empresa " . $usuario['razon_social'] . "</p>
+             <p>Adjuntamos la constancia de " . $tipo . ": <strong>{$result['codigo_reclamo']}</strong> .</p>
+             <p>También visualizarlo haciendo click  <a href='" . $url . "/seguimiento/{$result['evidencia_token']}'>Aquí<a></p>
+             <p>Para poder ver mas detalles y/o registrar cambios haga click <a href='" . $url . "/panel/reclamos/{$result['id']}'>Aquí<a></p>";
+        $correo_usuario = $usuario['email'];
+        \App\Services\Mailer::sendWithPdf($correo_usuario, 'Nuevo reclamo Registrado', $cuerpo, $pdfBytes, $pdfName);
       } catch (\Throwable $e) {
         \App\Services\Logger::error('EMAIL_FAIL', [
           'to' => $email,
@@ -395,6 +410,7 @@ final class PublicLibroController extends Controller
       'codigo' => $result['codigo_reclamo'],
       'venc' => $result['fecha_vencimiento_respuesta'],
       'token' => $result['evidencia_token'],
+      'email' => $email,
       'establecimiento' => $estab,
     ], 'public');
   }
@@ -597,7 +613,4 @@ final class PublicLibroController extends Controller
     header('Content-Length: ' . strlen($pdfBytes));
     echo $pdfBytes;
   }
-
-
-  
 }
