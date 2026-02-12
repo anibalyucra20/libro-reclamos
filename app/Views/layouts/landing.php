@@ -725,7 +725,7 @@
 
     .ctaInner {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 16px;
       padding: 18px;
       align-items: start;
@@ -918,12 +918,6 @@
         transition: none !important;
         scroll-behavior: auto !important;
       }
-    }
-
-    /* #contacto a ancho completo (sin limitar por --max) */
-    #contacto .wrap {
-      width: calc(100% - 48px);
-      max-width: none;
     }
   </style>
 </head>
