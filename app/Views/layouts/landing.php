@@ -582,8 +582,8 @@
               <div class="chip"><span class="spark" aria-hidden="true"></span> Nuevo registro</div>
               <h3>Formulario claro (menos de 2 minutos)</h3>
               <p>Campos esenciales, adjuntos y confirmación inmediata para el cliente.</p>
-              <!--<div class="row"><span>Completado</span><span style="color:#0F5132">72%</span></div>-->
-              <div class="bar" aria-hidden="true"><span></span></div>
+              <!--<div class="row"><span>Completado</span><span style="color:#0F5132">72%</span></div>
+              <div class="bar" aria-hidden="true"><span></span></div>-->
             </div>
 
             <div class="tile">
@@ -802,7 +802,7 @@
               Ideal para web, sedes físicas (QR) y equipos que necesitan trazabilidad real. También podemos integrarlo con tu correo/CRM/Helpdesk.
             </p>
 
-            <div class="cards" style="margin-top: 14px">
+            <div class="cards col-12" style="margin-top: 14px">
               <div class="card" style="grid-column: span 6; min-height: unset;">
                 <div class="chip"><span class="spark" aria-hidden="true"></span> Incluye</div>
                 <p>Formulario + panel + estados + reportes + exportación + personalización.</p>
