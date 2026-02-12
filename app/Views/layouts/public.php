@@ -12,7 +12,7 @@
 
   <!-- Iconos (opcional pero recomendado) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
+  <link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
   <style>
     :root {
       --app-bg: #f6f7fb;
@@ -325,6 +325,27 @@
   <!-- Contenido -->
   <main class="container py-4 py-lg-5">
     <div class="app-card bg-white p-3 p-md-4">
+      <?php if (!empty($errores)): ?>
+        <div class="alert alert-danger">
+          <ul>
+            <?php foreach ($errores as $e): ?>
+              <li><?= htmlspecialchars($e) ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+      <?php if (!empty($_SESSION['flash_success'])): ?>
+        <div class="alert alert-success alert-dismissible">
+          <?= $_SESSION['flash_success'] ?>
+        </div>
+        <?php unset($_SESSION['flash_success']); ?>
+      <?php endif; ?>
+      <?php if (!empty($_SESSION['flash_error'])): ?>
+        <div class="alert alert-danger alert-dismissible">
+          <?= $_SESSION['flash_error'] ?>
+        </div>
+        <?php unset($_SESSION['flash_error']); ?>
+      <?php endif; ?>
       <?= $content ?>
     </div>
   </main>

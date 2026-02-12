@@ -18,20 +18,23 @@ final class UsuariosRootController extends Controller
 
     if (($this->request->tenant['mode'] ?? '') !== 'panel_root') {
       http_response_code(400);
-      echo "Panel root inválido";
+      $_SESSION['flash_error'] = "Panel root inválido";
+      header("Location: /");
       exit;
     }
 
     $user = Auth::user();
     if (!$user) {
       http_response_code(403);
-      echo "Forbidden";
+      $_SESSION['flash_error'] = "Forbidden";
+      header("Location: /");
       exit;
     }
 
     if (!ACL::can((int)$user['id'], 'usuarios.gestionar', null, null)) {
       http_response_code(403);
-      echo "Sin permiso";
+      $_SESSION['flash_error'] = "Sin permiso";
+      header("Location: /");
       exit;
     }
   }
@@ -126,8 +129,10 @@ final class UsuariosRootController extends Controller
 
     $u = $svc->getUser($id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
 
@@ -156,15 +161,18 @@ final class UsuariosRootController extends Controller
 
     if (mb_strlen($pwd) < 8) {
       http_response_code(422);
-      echo "Password mínimo 8 caracteres";
+      $_SESSION['flash_error'] = "Password mínimo 8 caracteres";
+      header("Location: /panel/usuarios");
       return;
     }
 
     $svc = new UsuariosRootService();
     $u = $svc->getUser($id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
 

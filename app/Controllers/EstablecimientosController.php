@@ -19,7 +19,7 @@ final class EstablecimientosController extends Controller
 
         if (($this->request->tenant['mode'] ?? '') !== 'panel') {
             http_response_code(400);
-            echo "Panel inválido";
+            
             exit;
         }
 
@@ -28,13 +28,15 @@ final class EstablecimientosController extends Controller
 
         if (!$user || $empresaId <= 0) {
             http_response_code(403);
-            echo "Forbidden";
+            $_SESSION['flash_error'] = "Forbidden";
+            header("Location: /");
             exit;
         }
 
         if (!ACL::can((int)$user['id'], 'establecimientos.gestionar', $empresaId, null)) {
             http_response_code(403);
-            echo "Sin permiso";
+            $_SESSION['flash_error'] = "Sin permiso";
+            header("Location: /");
             exit;
         }
     }
@@ -83,10 +85,10 @@ final class EstablecimientosController extends Controller
 
         $data = $this->collectInput();
         $data['empresa_id'] = $empresaId;
- $panel = $this->panelPrefix();
+        $panel = $this->panelPrefix();
         try {
             $id = $this->insert($data);
-            $this->response->redirect($panel.'/establecimientos/' . $id . '?created=1');
+            $this->response->redirect($panel . '/establecimientos/' . $id . '?created=1');
         } catch (\Throwable $e) {
             $this->view('panel/establecimientos/form', [
                 'tenant' => $this->request->tenant,
@@ -107,8 +109,10 @@ final class EstablecimientosController extends Controller
 
         $row = Establecimiento::findInEmpresaAnyEstado($empresaId, $id);
         if (!$row) {
-            http_response_code(404);
-            echo "No encontrado";
+            $_SESSION['flash_error'] = "Establecimiento no encontrado";
+            //http_response_code(404);
+            //echo "No encontrado";
+            header("Location: /panel/establecimientos");
             return;
         }
 
@@ -131,16 +135,18 @@ final class EstablecimientosController extends Controller
 
         $row = Establecimiento::findInEmpresaAnyEstado($empresaId, $id);
         if (!$row) {
-            http_response_code(404);
-            echo "No encontrado";
+            $_SESSION['flash_error'] = "Establecimiento no encontrado";
+            //http_response_code(404);
+            //echo "No encontrado";
+            header("Location: /panel/establecimientos");
             return;
         }
 
         $data = $this->collectInput();
- $panel = $this->panelPrefix();
+        $panel = $this->panelPrefix();
         try {
             $this->doUpdate($empresaId, $id, $data);
-            $this->response->redirect($panel.'/establecimientos/' . $id . '?saved=1');
+            $this->response->redirect($panel . '/establecimientos/' . $id . '?saved=1');
         } catch (\Throwable $e) {
             http_response_code(422);
             echo $e->getMessage();

@@ -435,15 +435,19 @@ final class PublicLibroController extends Controller
     $token = (string)($this->request->params['token'] ?? '');
 
     if ($token === '') {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Constancia no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
     $reclamo = Reclamo::findByTokenInEmpresa($token, $empresaId);
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Constancia no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
@@ -462,15 +466,19 @@ final class PublicLibroController extends Controller
     $token = (string)($this->request->params['token'] ?? '');
 
     if ($token === '') {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Registro no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
     $reclamo = Reclamo::findByTokenInEmpresa($token, $empresaId);
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
@@ -509,10 +517,11 @@ final class PublicLibroController extends Controller
 
     if ($codigo === '' || $docNum === '') {
       http_response_code(422);
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
       $this->view('public.seguimiento_form', [
         'tenant' => $this->request->tenant,
         'csrf' => \App\Services\Csrf::token(),
-        'error' => 'Completa el código y documento.',
+        'error' => '',
       ], 'public');
       return;
     }
@@ -528,10 +537,11 @@ final class PublicLibroController extends Controller
 
     if (!$token) {
       http_response_code(404);
+      $_SESSION['flash_error'] = "No se encontró un reclamo con esos datos.";
       $this->view('public.seguimiento_form', [
         'tenant' => $this->request->tenant,
         'csrf' => \App\Services\Csrf::token(),
-        'error' => 'No se encontró un reclamo con esos datos.',
+        'error' => '',
       ], 'public');
       return;
     }
@@ -548,15 +558,19 @@ final class PublicLibroController extends Controller
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $token = (string)($this->request->params['token'] ?? '');
     if ($token === '') {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
     $reclamo = Reclamo::findByTokenInEmpresa($token, $empresaId);
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
@@ -583,16 +597,20 @@ final class PublicLibroController extends Controller
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $token = (string)($this->request->params['token'] ?? '');
     if ($token === '') {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 
     // ideal: que findByToken traiga empresa + establecimiento (si ya lo hace ok; si no, lo ajustamos luego)
     $reclamo = Reclamo::findByTokenInEmpresa($token, $empresaId);
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo/Queja no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /");
       return;
     }
 

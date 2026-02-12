@@ -1,4 +1,5 @@
 <?php
+
 use App\Services\Auth;
 use App\Services\ACL;
 use App\Services\Csrf;
@@ -352,6 +353,27 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
       <main class="main">
         <div class="container-fluid px-0">
           <div class="main-card">
+            <?php if (!empty($errores)): ?>
+              <div class="alert alert-danger">
+                <ul>
+                  <?php foreach ($errores as $e): ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
+            <?php if (!empty($_SESSION['flash_success'])): ?>
+              <div class="alert alert-success alert-dismissible">
+                <?= $_SESSION['flash_success'] ?>
+              </div>
+              <?php unset($_SESSION['flash_success']); ?>
+            <?php endif; ?>
+            <?php if (!empty($_SESSION['flash_error'])): ?>
+              <div class="alert alert-danger alert-dismissible">
+                <?= $_SESSION['flash_error'] ?>
+              </div>
+              <?php unset($_SESSION['flash_error']); ?>
+            <?php endif; ?>
             <?= $content ?>
           </div>
 

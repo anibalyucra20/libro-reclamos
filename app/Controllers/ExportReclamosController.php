@@ -17,7 +17,8 @@ final class ExportReclamosController extends Controller
 
     if (($this->request->tenant['mode'] ?? '') !== 'panel') {
       http_response_code(400);
-      echo "Panel inválido";
+      $_SESSION['flash_error'] = "Panel inválido";
+      header("Location: /");
       exit;
     }
 
@@ -26,13 +27,15 @@ final class ExportReclamosController extends Controller
 
     if (!$user || $empresaId <= 0) {
       http_response_code(403);
-      echo "Forbidden";
+      $_SESSION['flash_error'] = "Forbidden";
+      header("Location: /");
       exit;
     }
 
     if (!\App\Services\ACL::can((int)$user['id'], $perm, $empresaId, null)) {
       http_response_code(403);
-      echo "Sin permiso";
+      $_SESSION['flash_error'] = "Sin permiso";
+      header("Location: /");
       exit;
     }
   }

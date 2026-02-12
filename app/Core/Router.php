@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Controller;
+
 final class Router
 {
   private array $routes = ['GET' => [], 'POST' => []];
@@ -37,8 +39,22 @@ final class Router
       }
     }
 
-    http_response_code(404);
-    echo "404 Not Found";
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    // Normalizamos quitando trailing slash excepto si es root
+    if ($path !== '/' && str_ends_with($path, '/')) {
+      $path = rtrim($path, '/');
+    }
+    $panelPrefix = '/panel';
+    // Determinar destino
+    if ($path === $panelPrefix || str_starts_with($path, $panelPrefix . '/')) {
+      $redirectTo = $panelPrefix . '/';
+    } else {
+      $redirectTo = '/';
+    }
+    $_SESSION['flash_error'] = "Página no encontrada";
+    // Redirección 302 (no uses 404 si vas a redirigir)
+    header("Location: " . $redirectTo, true, 302);
+    exit;
   }
 
   private function match(string $pattern, string $path): ?array

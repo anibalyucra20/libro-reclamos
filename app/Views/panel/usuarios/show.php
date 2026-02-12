@@ -68,7 +68,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
   <div class="col-12 col-lg-6">
     <div class="card border-0 shadow-sm">
       <div class="card-body">
-        <div class="fw-bold mb-2">Scopes (empresa actual)</div>
+        <div class="fw-bold mb-2">Permisos (empresa actual)</div>
 
         <div class="table-responsive">
           <table class="table align-middle">
@@ -83,7 +83,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             <tbody>
               <?php if (!$scopes): ?>
                 <tr>
-                  <td colspan="4" class="text-body-secondary">Sin scopes.</td>
+                  <td colspan="4" class="text-body-secondary">Sin Permisos.</td>
                 </tr>
               <?php else: ?>
                 <?php foreach ($scopes as $s): ?>
@@ -112,7 +112,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
 
         <hr>
 
-        <div class="fw-bold mb-2">Agregar scope</div>
+        <div class="fw-bold mb-2">Agregar Permiso</div>
         <form method="POST" action="<?= $__panelPrefix ?>/usuarios/<?= (int)$u['id'] ?>/scope" class="row g-2">
           <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8') ?>">
 

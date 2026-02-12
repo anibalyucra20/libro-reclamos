@@ -18,7 +18,8 @@ final class UsuariosController extends Controller
 
     if (($this->request->tenant['mode'] ?? '') !== 'panel') {
       http_response_code(400);
-      echo "Panel inválido";
+      $_SESSION['flash_error'] = "Panel inválido";
+      header("Location: /");
       return;
     }
 
@@ -27,13 +28,15 @@ final class UsuariosController extends Controller
 
     if (!$user || $empresaId <= 0) {
       http_response_code(403);
-      echo "Forbidden";
+      $_SESSION['flash_error'] = "Forbidden";
+      header("Location: /");
       return;
     }
 
     if (!ACL::can((int)$user['id'], $perm, $empresaId, null)) {
       http_response_code(403);
-      echo "Sin permiso";
+      $_SESSION['flash_error'] = "Sin permiso";
+      header("Location: /");
       return;
     }
   }
@@ -79,7 +82,8 @@ final class UsuariosController extends Controller
     $pwd = (string)$this->request->input('password');
     if (mb_strlen($pwd) < 8) {
       http_response_code(422);
-      echo "La contraseña debe tener al menos 8 caracteres";
+      $_SESSION['flash_error'] = "La contraseña debe tener al menos 8 caracteres";
+      header("Location: /panel/usuarios/nuevo");
       return;
     }
 
@@ -117,8 +121,10 @@ final class UsuariosController extends Controller
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
 
@@ -149,8 +155,10 @@ final class UsuariosController extends Controller
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
     $panel = $this->panelPrefix();
@@ -184,15 +192,18 @@ final class UsuariosController extends Controller
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
 
     $rolId = (int)$this->request->input('rol_id');
     if ($rolId <= 0) {
       http_response_code(422);
-      echo "Rol inválido";
+      $_SESSION['flash_error'] = "Rol inválido";
+      header("Location: /panel/usuarios");
       return;
     }
     $sidRaw = $this->request->input('establecimiento_id', '');
@@ -219,8 +230,10 @@ final class UsuariosController extends Controller
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
     $panel = $this->panelPrefix();
@@ -244,14 +257,17 @@ final class UsuariosController extends Controller
     $svc = new UsuariosService();
     $u = $svc->getUserInEmpresa($empresaId, $id);
     if (!$u) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Usuario no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/usuarios");
       return;
     }
     $pwd = (string)$this->request->input('password');
     if (mb_strlen($pwd) < 8) {
       http_response_code(422);
-      echo "La contraseña debe tener al menos 8 caracteres";
+      $_SESSION['flash_error'] = "La contraseña debe tener al menos 8 caracteres";
+      header("Location: /panel/usuarios");
       return;
     }
 

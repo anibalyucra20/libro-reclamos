@@ -20,14 +20,16 @@ final class EmpresasController extends Controller
     $user = Auth::user();
     if (!$user) {
       http_response_code(403);
-      echo "Forbidden";
+      $_SESSION['flash_error'] = "Forbidden";
+      header("Location: /");
       exit;
     }
 
     // ✅ permiso empresas.gestionar con scope GLOBAL (empresa_id NULL)
     if (!ACL::can((int)$user['id'], 'empresas.gestionar', null, null)) {
       http_response_code(403);
-      echo "Sin permiso";
+      $_SESSION['flash_error'] = "Sin permiso";
+      header("Location: /");
       exit;
     }
   }
@@ -73,7 +75,7 @@ final class EmpresasController extends Controller
     $panel = $this->panelPrefix();
     try {
       $id = $this->insert($data);
-      $this->response->redirect($panel.'/empresas/' . $id . '?created=1');
+      $this->response->redirect($panel . '/empresas/' . $id . '?created=1');
     } catch (\Throwable $e) {
       $this->view('panel_root/empresas/form', [
         'tenant' => $this->request->tenant,
@@ -92,8 +94,10 @@ final class EmpresasController extends Controller
     $id = (int)($this->request->params['id'] ?? 0);
     $row = Empresa::findById($id);
     if (!$row) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Empresa no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/empresas");
       return;
     }
 
@@ -114,8 +118,10 @@ final class EmpresasController extends Controller
     $id = (int)($this->request->params['id'] ?? 0);
     $row = Empresa::findById($id);
     if (!$row) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Empresa no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/empresas");
       return;
     }
 
@@ -146,8 +152,8 @@ final class EmpresasController extends Controller
       ':estado' => $data['estado'],
       ':id' => $id,
     ]);
- $panel = $this->panelPrefix();
-    $this->response->redirect($panel.'/empresas/' . $id . '?saved=1');
+    $panel = $this->panelPrefix();
+    $this->response->redirect($panel . '/empresas/' . $id . '?saved=1');
   }
 
   private function collectInput(bool $isUpdate = false): array

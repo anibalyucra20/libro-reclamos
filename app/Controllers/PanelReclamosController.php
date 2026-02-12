@@ -18,7 +18,8 @@ final class PanelReclamosController extends Controller
 
     if (($this->request->tenant['mode'] ?? '') !== 'panel') {
       http_response_code(400);
-      echo "Panel inválido";
+      $_SESSION['flash_error'] = "Panel inválido";
+      header("Location: /");
       exit;
     }
 
@@ -27,14 +28,16 @@ final class PanelReclamosController extends Controller
 
     if (!$user || $empresaId <= 0) {
       http_response_code(403);
-      echo "Forbidden";
+      $_SESSION['flash_error'] = "Forbidden";
+      header("Location: /");
       exit;
     }
 
     // ACL por empresa (nivel empresa)
     if (!\App\Services\ACL::can((int)$user['id'], $perm, $empresaId, null)) {
       http_response_code(403);
-      echo "Sin permiso";
+      $_SESSION['flash_error'] = "Sin permis";
+      header("Location: /");
       exit;
     }
   }
@@ -111,8 +114,10 @@ final class PanelReclamosController extends Controller
     $reclamo = $st->fetch();
 
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
@@ -151,8 +156,10 @@ final class PanelReclamosController extends Controller
     $empresaId = (int)$this->request->tenant['empresa_id'];
     $id = (int)($this->request->params['id'] ?? 0);
     if ($id <= 0) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
@@ -189,8 +196,10 @@ final class PanelReclamosController extends Controller
     $reclamo = $st->fetch();
 
     if (!$reclamo) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
@@ -236,7 +245,8 @@ final class PanelReclamosController extends Controller
 
     if ($respuesta === '') {
       http_response_code(422);
-      echo "Respuesta requerida";
+      $_SESSION['flash_error'] = "Respuesta requerida";
+      header("Location: /panel/recalmos/".$id);
       return;
     }
 
@@ -257,8 +267,10 @@ final class PanelReclamosController extends Controller
 
       if (!$row) {
         $pdo->rollBack();
-        http_response_code(404);
-        echo "No encontrado";
+        $_SESSION['flash_error'] = "Reclamo no encontrado";
+        //http_response_code(404);
+        //echo "No encontrado";
+        header("Location: /panel/reclamos");
         return;
       }
 
@@ -438,15 +450,19 @@ final class PanelReclamosController extends Controller
     $r = $st->fetch();
 
     if (!$r) {
-      http_response_code(404);
-      echo "No encontrado";
+      $_SESSION['flash_error'] = "Reclamo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
     $path = (string)($r['evidencia_path'] ?? '');
     if ($path === '') {
-      http_response_code(404);
-      echo "Este reclamo no tiene evidencia adjunta";
+      $_SESSION['flash_error'] = "Este reclamo no tiene evidencia adjunta";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
@@ -470,8 +486,10 @@ final class PanelReclamosController extends Controller
 
     // Si por alguna razón quedó vacío
     if ($pathNorm === '') {
-      http_response_code(404);
-      echo "Archivo no encontrado";
+      $_SESSION['flash_error'] = "Archivo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
@@ -480,8 +498,10 @@ final class PanelReclamosController extends Controller
 
     $real = realpath($candidate);
     if ($real === false || !is_file($real)) {
-      http_response_code(404);
-      echo "Archivo no encontrado";
+      $_SESSION['flash_error'] = "Archivo no encontrado";
+      //http_response_code(404);
+      //echo "No encontrado";
+      header("Location: /panel/reclamos");
       return;
     }
 
