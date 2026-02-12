@@ -1,5 +1,4 @@
 <?php
-
 use App\Services\Auth;
 use App\Services\ACL;
 use App\Services\Csrf;
@@ -17,6 +16,10 @@ $__canReportes = $__user && $__empresaId > 0
   : false;
 $__canAlertas = $__user && $__empresaId > 0
   ? ACL::can((int)$__user['id'], 'alertas.gestionar', $__empresaId, null)
+  : false;
+
+$__canReclamosResponder = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'reclamos.responder', $__empresaId, null)
   : false;
 
 $__canUsuariosEmpresa = $__user && $__empresaId > 0
@@ -186,7 +189,7 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
             data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
             <i class="bi bi-list"></i>
           </button>
-          
+
           <a class="navbar-brand d-flex align-items-center gap-2 fw-bold mb-0" href="<?= $__panelPrefix ?>/">
             <span class="" aria-hidden="true"><i class="bi bi-book me-1"></i></span>
             <span>Panel</span>

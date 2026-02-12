@@ -1,4 +1,16 @@
 <?php
+
+use App\Services\Auth;
+use App\Services\ACL;
+use App\Services\Csrf;
+
+$__csrf = Csrf::token();
+$__user = Auth::user();
+$__empresaId = (int)($tenant['empresa_id'] ?? 0);
+$__canReclamosResponder = $__user && $__empresaId > 0
+  ? ACL::can((int)$__user['id'], 'reclamos.responder', $__empresaId, null)
+  : false;
+
 $__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
 if ($__panelPrefix === '') $__panelPrefix = '/panel';
 
@@ -130,7 +142,7 @@ $evidenciaSizeKb = $evidenciaSize > 0
       <i class="bi bi-file-earmark-pdf me-1"></i> PDF oficial
     </a>
 
-    <?php if ($canReply): ?>
+    <?php if ($__canReclamosResponder): ?>
       <a class="btn btn-primary" href="#responder">
         <i class="bi bi-reply me-1"></i> Responder
       </a>
@@ -304,40 +316,42 @@ $evidenciaSizeKb = $evidenciaSize > 0
     </div>
 
     <!-- Responder -->
-    <div class="card border-0 shadow-sm mt-3" id="responder">
-      <div class="card-body p-4">
-        <h2 class="h5 fw-semibold mb-1">Responder</h2>
-        <?php if ($canReply): ?>
-          <div class="text-body-secondary mb-3">
-            Al enviar una respuesta, el estado pasará a <span class="fw-semibold">RESPONDIDO</span>.
-          </div>
-
-          <form method="POST" action="<?= $__panelPrefix ?>/reclamos/<?= $id ?>/responder" class="needs-validation" novalidate>
-            <input type="hidden" name="_csrf" value="<?= htmlspecialchars(\App\Services\Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
-
-            <label class="form-label">Respuesta <span class="text-danger">*</span></label>
-            <textarea class="form-control" name="respuesta" required rows="5" placeholder="Escribe la respuesta para el consumidor..."></textarea>
-            <div class="invalid-feedback">La respuesta es requerida.</div>
-
-            <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-3">
-              <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>">
-                <i class="bi bi-x-circle me-1"></i> Cancelar
-              </a>
-              <button type="submit" class="btn btn-primary">
-                <i class="bi bi-send me-1"></i> Enviar respuesta
-              </button>
+    <?php if ($__canReclamosResponder): ?>
+      <div class="card border-0 shadow-sm mt-3" id="responder">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-1">Responder</h2>
+          <?php if ($canReply): ?>
+            <div class="text-body-secondary mb-3">
+              Al enviar una respuesta, el estado pasará a <span class="fw-semibold">RESPONDIDO</span>.
             </div>
-          </form>
-        <?php else: ?>
-          <div class="alert alert-light border d-flex gap-2 align-items-start mb-0">
-            <i class="bi bi-info-circle mt-1"></i>
-            <div class="text-body-secondary">
-              Este reclamo ya fue respondido o cerrado.
+
+            <form method="POST" action="<?= $__panelPrefix ?>/reclamos/<?= $id ?>/responder" class="needs-validation" novalidate>
+              <input type="hidden" name="_csrf" value="<?= htmlspecialchars(\App\Services\Csrf::token(), ENT_QUOTES, 'UTF-8') ?>">
+
+              <label class="form-label">Respuesta <span class="text-danger">*</span></label>
+              <textarea class="form-control" name="respuesta" required rows="5" placeholder="Escribe la respuesta para el consumidor..."></textarea>
+              <div class="invalid-feedback">La respuesta es requerida.</div>
+
+              <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-3">
+                <a class="btn btn-outline-secondary" href="<?= $__panelPrefix ?>/reclamos/<?= $id ?>">
+                  <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-send me-1"></i> Enviar respuesta
+                </button>
+              </div>
+            </form>
+          <?php else: ?>
+            <div class="alert alert-light border d-flex gap-2 align-items-start mb-0">
+              <i class="bi bi-info-circle mt-1"></i>
+              <div class="text-body-secondary">
+                Este reclamo ya fue respondido o cerrado.
+              </div>
             </div>
-          </div>
-        <?php endif; ?>
+          <?php endif; ?>
+        </div>
       </div>
-    </div>
+    <?php endif; ?>
   </div>
 
   <!-- Right: side panels -->
