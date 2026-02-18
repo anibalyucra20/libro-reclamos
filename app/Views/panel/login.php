@@ -10,11 +10,15 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
 
 <form method="POST" action="<?= $__panelPrefix ?>/login">
   <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf) ?>">
-  <label>Email</label><br>
-  <input type="email" name="email" required><br><br>
-
-  <label>Password</label><br>
-  <input type="password" name="password" required><br><br>
-
-  <button type="submit">Ingresar</button>
+  <div class="form-group">
+    <label>Email</label><br>
+    <input type="email" name="email" class="form-control" required><br><br>
+  </div>
+  <div class="form-group">
+    <label>Password</label><br>
+    <input type="password" name="password" class="form-control" required><br><br>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-success">Ingresar</button>
+  </div>
 </form>
