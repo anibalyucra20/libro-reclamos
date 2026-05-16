@@ -44,7 +44,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             <th>Usuario</th>
             <th>Email</th>
             <th>Estado</th>
-            <th>Scopes</th>
+            <th>Permisos</th>
             <th>Empresas</th>
             <th class="text-end">Acción</th>
           </tr>

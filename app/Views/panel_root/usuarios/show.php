@@ -49,7 +49,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             </thead>
             <tbody>
               <?php if (!$scopes): ?>
-                <tr><td colspan="4" class="text-body-secondary">Sin scopes.</td></tr>
+                <tr><td colspan="4" class="text-body-secondary">Sin Permisos.</td></tr>
               <?php else: ?>
                 <?php foreach ($scopes as $s): ?>
                   <tr>
