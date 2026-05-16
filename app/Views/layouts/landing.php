@@ -1240,7 +1240,9 @@
     <div class="wrap">
       <div class="foot">
         <div style="display:flex; gap:12px; align-items:center">
-          <div class="logo" aria-hidden="true" style="width:34px; height:34px; border-radius:14px"></div>
+          <div class="logo" aria-hidden="true" style="width:34px; height:34px; border-radius:14px">
+            <img src="https://static.wixstatic.com/media/20e39e_1ddcfcc879114571ad05bd742592ff93~mv2.png/v1/fill/w_696,h_274,al_c,lg_1,q_85,enc_avif,quality_auto/LIBRO.png" alt="img libro" style="width: 100%; margin-top: 8px;">
+          </div>
           <div>
             <div style="font-weight:950; color: var(--text)">Libro de Reclamaciones</div>
             <div style="font-size:12px">© <span id="year"></span> • Atención al cliente profesional</div>
