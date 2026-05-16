@@ -41,7 +41,7 @@ $st = (string)($row['estado'] ?? 'ACTIVO');
       </div>
 
       <div class="col-12 col-lg-6">
-        <label class="form-label">Slug (subdominio)</label>
+        <label class="form-label">Sub Dominio</label>
         <input class="form-control" name="slug" required
           value="<?= htmlspecialchars((string)($row['slug'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
         <div class="form-text">Ej: empresa1</div>
