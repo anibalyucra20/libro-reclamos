@@ -2,12 +2,9 @@
 $__panelPrefix = rtrim((string)($tenant['panel_prefix'] ?? '/panel'), '/');
 if ($__panelPrefix === '') $__panelPrefix = '/panel';
 ?>
-<h1>Login</h1>
-
 <?php if (!empty($error)): ?>
   <p style="color:red;"><?= htmlspecialchars($error) ?></p>
 <?php endif; ?>
-
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card shadow-lg border-0" style="max-width: 420px; width: 100%; border-radius: 16px;">
         <div class="card-body p-4 p-md-5">
@@ -25,7 +22,6 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
             <!-- Formulario -->
             <form method="POST" action="<?= $__panelPrefix ?>/login">
                 <input type="hidden" name="_csrf" value="<?= htmlspecialchars($csrf) ?>">
-
                 <!-- Grupo: Correo -->
                 <div class="mb-3">
                     <label class="form-label small fw-semibold text-secondary mb-1">Correo Electrónico</label>
