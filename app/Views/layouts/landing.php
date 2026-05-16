@@ -932,7 +932,7 @@
     <div class="wrap">
       <nav class="nav" aria-label="Menú principal">
         <a class="brand" href="#inicio">
-          <div class="logo" aria-hidden="true"><img src="https://static.wixstatic.com/media/20e39e_1ddcfcc879114571ad05bd742592ff93~mv2.png/v1/fill/w_696,h_274,al_c,lg_1,q_85,enc_avif,quality_auto/LIBRO.png" alt="img libro" style="width: 100%;"></div>
+          <div class="logo" aria-hidden="true"><img src="https://static.wixstatic.com/media/20e39e_1ddcfcc879114571ad05bd742592ff93~mv2.png/v1/fill/w_696,h_274,al_c,lg_1,q_85,enc_avif,quality_auto/LIBRO.png" alt="img libro" style="width: 100%; margin-top: 10px;"></div>
           <div>
             <div style="font-size:14px; opacity:.98">Libro de Reclamaciones</div>
             <small>Digital • Profesional • Ordenado</small>
