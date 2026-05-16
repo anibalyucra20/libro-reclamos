@@ -932,7 +932,7 @@
     <div class="wrap">
       <nav class="nav" aria-label="Menú principal">
         <a class="brand" href="#inicio">
-          <div class="logo" aria-hidden="true"><i class="bi bi-book me-1" style="width: 80%;"></i></div>
+          <div class="logo" aria-hidden="true"><img src="https://elementi.me/wp-content/uploads/2020/08/Libro-de-reclamaciones-Azul-300x300.png" alt="img libro"></div>
           <div>
             <div style="font-size:14px; opacity:.98">Libro de Reclamaciones</div>
             <small>Digital • Profesional • Ordenado</small>
