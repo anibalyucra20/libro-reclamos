@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Libro de Reclamaciones | Profesional</title>
   <meta name="description" content="Landing profesional para Libro de Reclamaciones: formulario, seguimiento, reportes, FAQ y CTA." />
-  <link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
+  <link rel="icon" href="https://elementi.me/wp-content/uploads/2020/08/Libro-de-reclamaciones-Azul-300x300.png">
 
   <style>
     :root {

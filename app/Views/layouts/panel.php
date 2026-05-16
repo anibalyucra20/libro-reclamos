@@ -67,7 +67,7 @@ if (str_starts_with($__pathNorm, $__panelPrefix . '/')) {
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="icon" href="https://cmplima.org.pe/wp-content/uploads/2022/09/Libro-de-reclamaciones-Azul-300x300-1.png">
+  <link rel="icon" href="https://elementi.me/wp-content/uploads/2020/08/Libro-de-reclamaciones-Azul-300x300.png">
   <style>
     :root {
       --app-bg: #f6f7fb;
