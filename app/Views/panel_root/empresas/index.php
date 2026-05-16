@@ -21,7 +21,7 @@ if ($__panelPrefix === '') $__panelPrefix = '/panel';
           <th class="ps-3">ID</th>
           <th>RUC</th>
           <th>Razón Social</th>
-          <th>Slug</th>
+          <th>Sub Dominio</th>
           <th>Estado</th>
           <th class="text-end pe-3">Acción</th>
         </tr>
